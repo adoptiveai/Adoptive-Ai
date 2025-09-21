@@ -1,0 +1,58 @@
+# Cursor rules for adoptive-ai-frontend
+
+[General]
+- Create React App (CRA 5) with React 19 drives this frontend; code lives under `src/`.
+- Write modern JavaScript with functional React components and Hooks only; avoid class components.
+- Prefer composition over inheritance; keep components focused on a single responsibility.
+- Use the existing npm workflow (`npm install`, `npm start`, `npm test`, `npm run build`); do not introduce yarn or PNPM artifacts.
+
+[Project Layout]
+- Maintain the flat structure until specific feature domains justify subfolders.
+- New shared helpers belong in `src/utils/` (create the directory if it does not exist) with clear function-level JSDoc comments when intent is non-trivial.
+- Assets stay in `public/` for static files or `src/assets/` (create if needed) for imported modules.
+
+[React Components]
+- Use PascalCase file names and default exports for single-component files (e.g., `UserCard.js`).
+- Keep components small; extract child components when JSX exceeds ~100 lines or encapsulating logic clarifies reuse.
+- Derive props at the parent level when possible; avoid prop drilling more than two levels—consider context or custom hooks as alternatives.
+- Memoize expensive computations with `useMemo` and event handlers with `useCallback` when rerenders become a concern.
+- Co-locate component-specific hooks inside the component file or a sibling `use*.js` file when they are reused.
+
+[State & Data]
+- Prefer `useState` for local UI state, `useReducer` for complex state machines, and `useRef` for non-render state.
+- Derive state from props rather than duplicating it; derive booleans or computed values on the fly unless performance dictates memoization.
+- Use React Query–style patterns (custom hooks that wrap fetches) if asynchronous data is introduced; keep side effects inside `useEffect` with well-defined dependency arrays.
+- Encapsulate Context providers near their consumers; document default values and avoid creating contexts with large, monolithic objects.
+
+[Styling]
+- Continue using the existing CSS files (`App.css`, `index.css`). If adding component-specific styles, create adjacent `.css` files and import them explicitly.
+- Keep class names semantic; avoid inline styles unless dynamic computation is required.
+- Consider CSS variables for theme-level tokens; avoid introducing new preprocessors without discussing the impact.
+
+[Accessibility]
+- Use semantic HTML tags (`button`, `nav`, `main`, etc.) and ensure interactive elements are keyboard accessible.
+- Provide `aria-*` attributes only when semantics are not conveyed through native elements.
+- Link images to descriptive `alt` text; use empty `alt` values for purely decorative assets.
+
+[Testing]
+- Jest with React Testing Library is the default: write tests from the user’s perspective (`screen`, `userEvent`).
+- Cover critical paths (rendering, interactions, async states) for every new component or hook.
+- Prefer integration-style component tests over brittle snapshot tests; avoid enzyme/shallow-style patterns.
+- Mock network requests with `msw` or lightweight fetch mocks colocated with tests; clean up mocks after each test.
+
+[Performance]
+- Avoid unnecessary re-renders by keeping component props minimal and stabilizing callbacks passed to children.
+- Defer heavy work (`requestIdleCallback`, `setTimeout`) when it does not block first paint.
+- Use code splitting via `React.lazy` and `Suspense` if pages grow large.
+
+[Dependencies]
+- Add dependencies only when they solve a clear problem; keep bundle footprint in mind.
+- When adding a dependency, document the reason in the PR description and update `docs/project-overview.md` if it affects architecture.
+
+[Documentation]
+- Update `docs/project-overview.md` and the root `README.md` when workflows, commands, or architecture change.
+- For major components, add brief usage notes or ADR-style summaries in `docs/` to help future contributors.
+
+[Process]
+- Run `npm test` before proposing significant changes; ensure linting warnings are addressed.
+- Keep commits scoped and message them clearly (present tense, imperative mood).

@@ -1,0 +1,18 @@
+# Folders Cursor should ignore when generating context
+node_modules/
+build/
+coverage/
+public/
+
+# Config artifacts not helpful for code assistance
+*.log
+*.lock
+.DS_Store
+
+# Git internals
+.git/
+.gitignore
+
+# Environment and temp files
+.env*
+*.tmp
