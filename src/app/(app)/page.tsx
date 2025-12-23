@@ -1,18 +1,19 @@
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
+import { Metadata } from 'next';
 
-export const dynamic = 'force-dynamic';
+export const metadata: Metadata = {
+  title: 'Redirecting...',
+};
 
-export default async function HomePage() {
-  // Check if user is authenticated via cookie
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token');
-
-  // If not authenticated, redirect to login
-  if (!accessToken) {
-    redirect('/login');
-  }
-
-  // If authenticated, redirect to app/chat (we'll create this route)
-  redirect('/chat');
+export default function RootPage() {
+  // Simple redirect using meta tag (works everywhere)
+  return (
+    <html>
+      <head>
+        <meta httpEquiv="refresh" content="0; url=/login" />
+      </head>
+      <body>
+        <p>Redirecting to login...</p>
+      </body>
+    </html>
+  );
 }
