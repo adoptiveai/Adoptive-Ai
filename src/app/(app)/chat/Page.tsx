@@ -1,7 +1,0 @@
-import { ChatPage } from '@/components/chat/ChatPage';
-
-export const dynamic = 'force-dynamic';
-
-export default function ChatPageRoute() {
-    return <ChatPage />;
-}
