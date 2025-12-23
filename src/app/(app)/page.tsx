@@ -1,34 +1,18 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { ChatPage } from '@/components/chat/ChatPage';
-import { useAuthStore } from '@/store/authStore';
-import { Box, CircularProgress } from '@mui/material';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 export const dynamic = 'force-dynamic';
 
-export default function HomePage() {
-  const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthStore();
+export default async function HomePage() {
+  // Check if user is authenticated via cookie
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('access_token');
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace('/login');
-    }
-  }, [isAuthenticated, isLoading, router]);
-
-  if (isLoading) {
-    return (
-      <Box sx={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
-        <CircularProgress />
-      </Box>
-    );
+  // If not authenticated, redirect to login
+  if (!accessToken) {
+    redirect('/login');
   }
 
-  if (!isAuthenticated) {
-    return null; // Will redirect via useEffect
-  }
-
-  return <ChatPage />;
+  // If authenticated, redirect to app/chat (we'll create this route)
+  redirect('/chat');
 }
