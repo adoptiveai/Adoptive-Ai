@@ -19,6 +19,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  _hasHydrated: boolean;
 }
 
 interface AuthActions {
@@ -28,6 +29,7 @@ interface AuthActions {
   clearError: () => void;
   checkAuth: () => Promise<void>;
   setUser: (user: AuthUser | null) => void;
+  setHasHydrated: (state: boolean) => void;
 }
 
 type AuthStore = AuthState & AuthActions;
@@ -89,6 +91,7 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
+      _hasHydrated: false,
 
       login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
@@ -180,6 +183,7 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       setUser: (user: AuthUser | null) => set({ user }),
+      setHasHydrated: (state: boolean) => set({ _hasHydrated: state }),
     }),
     {
       name: 'auth-storage',
@@ -190,6 +194,7 @@ export const useAuthStore = create<AuthStore>()(
         isAuthenticated: state.isAuthenticated,
       }),
       onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
         if (state?.accessToken) {
           agentClient.setAuthToken(state.accessToken);
         }

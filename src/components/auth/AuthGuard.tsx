@@ -20,7 +20,7 @@ const fallbackUser = {
 export function AuthGuard({ children }: Props) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isAuthenticated, setUser, accessToken, checkAuth } = useAuthStore();
+  const { user, isAuthenticated, setUser, accessToken, _hasHydrated } = useAuthStore();
 
   useEffect(() => {
     if (user && accessToken) {
@@ -35,12 +35,12 @@ export function AuthGuard({ children }: Props) {
   }, [user, setUser]);
 
   useEffect(() => {
-    if (!noAuth && !isAuthenticated) {
+    if (_hasHydrated && !noAuth && !isAuthenticated) {
       router.replace('/login?next=' + encodeURIComponent(pathname ?? '/'));
     }
-  }, [isAuthenticated, router, pathname]);
+  }, [isAuthenticated, router, pathname, _hasHydrated]);
 
-  if (!noAuth && !isAuthenticated) {
+  if (!_hasHydrated || (!noAuth && !isAuthenticated)) {
     return (
       <Box sx={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
         <CircularProgress />
