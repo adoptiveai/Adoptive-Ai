@@ -40,6 +40,17 @@ export function AuthGuard({ children }: Props) {
     }
   }, [isAuthenticated, router, pathname, _hasHydrated]);
 
+  // Handle BF Cache (Back/Forward Cache) restoration
+  useEffect(() => {
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    };
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
+  }, []);
+
   if (!_hasHydrated || (!noAuth && !isAuthenticated)) {
     return (
       <Box sx={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>

@@ -21,7 +21,8 @@ export function AppHeader() {
 
   const handleLogout = () => {
     logout();
-    router.replace('/login');
+    // Force a hard navigation to clear client-side state
+    window.location.href = '/login';
   };
 
   return (
