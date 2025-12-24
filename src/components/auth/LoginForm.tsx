@@ -31,7 +31,7 @@ export function LoginForm() {
       await login(email, password);
       // toast.success(dt.SUCCESS_MESSAGE || 'Welcome back!'); // Store might handle redirects or let the page do it
       // For now, let's assume we want to redirect to home
-      router.push('/');
+      router.push('/chat');
       toast.success('Welcome back!');
     } catch (err) {
       const message = err instanceof Error ? err.message : (dt.LOGIN_FAILED || 'Login failed');
