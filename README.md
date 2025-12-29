@@ -1,11 +1,11 @@
-# PolyRAG Next.js Client
+# AdoptiveAI Next.js Client
 
-A Next.js front end that mirrors the Streamlit experience for PolyRAG. It provides authentication, conversation management, file uploads, PDF inspection with annotations, SQL and graph tooling, plus feedback capture – all backed by the existing agent service.
+A Next.js front end that mirrors the Streamlit experience for AdoptiveAI. It provides authentication, conversation management, file uploads, PDF inspection with annotations, SQL and graph tooling, plus feedback capture – all backed by the existing agent service.
 
 ## Prerequisites
 
 - Node.js 20+
-- Access to the PolyRAG API (default `http://localhost:8080`)
+- Access to the AdoptiveAI API (default `http://localhost:8080`)
 - PostgreSQL credentials if authentication is enabled (`DATABASE_URL`, optional `EMAIL_DOMAIN`)
 - Optional SendGrid credentials for automatic password e-mails (`SENDGRID_API_KEY`, `SENDGRID_FROM_EMAIL`)
 

@@ -498,7 +498,7 @@ export function ChatPage() {
               {conversationTitle || dt.DEFAULT_CONVERSATION_TITLE}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {dt.CAPTION || 'PolyRAG - AI Research Assistant'}
+              {dt.CAPTION || 'AdoptiveAI - AI Research Assistant'}
             </Typography>
           </Box>
           <Box sx={{ ml: 'auto' }}>

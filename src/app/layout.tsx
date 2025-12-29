@@ -14,8 +14,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PolyRAG",
-  description: "PolyRAG web console powered by Next.js",
+  title: "AdoptiveAI",
+  description: "AdoptiveAI web console powered by Next.js",
 };
 
 export default function RootLayout({

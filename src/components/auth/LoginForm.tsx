@@ -56,7 +56,9 @@ export function LoginForm() {
         <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
           <Stack spacing={3}>
             <Stack spacing={1.5} alignItems="center">
-              <Box component="img" src="/polyrag.svg" alt="PolyRAG" sx={{ height: 56 }} />
+              <Typography variant="h4" fontWeight={800} sx={{ color: 'primary.main', mb: 1 }}>
+                AdoptiveAI
+              </Typography>
               <Typography variant="h5" fontWeight={600} textAlign="center">
                 {dt.LOGIN_WELCOME || 'Welcome Back'}
               </Typography>

@@ -69,7 +69,7 @@ export const sendPasswordEmail = async (email: string, password: string): Promis
     await sgMail.send({
       to: email,
       from: SENDGRID_FROM_EMAIL,
-      subject: 'Your PolyRAG account password',
+      subject: 'Your AdoptiveAI account password',
       html: `<p>Your new password is: <strong>${password}</strong></p>`,
     });
     return true;
@@ -80,7 +80,7 @@ export const sendPasswordEmail = async (email: string, password: string): Promis
 };
 
 export const registerNewUser = async (email: string) => {
-  if (EMAIL_DOMAIN && !email.toLowerCase().endswith(EMAIL_DOMAIN.toLowerCase())) {
+  if (EMAIL_DOMAIN && !email.toLowerCase().endsWith(EMAIL_DOMAIN.toLowerCase())) {
     return { user: null as UserRecord | null, password: null as string | null, sent: false, reason: 'invalid_domain' };
   }
 

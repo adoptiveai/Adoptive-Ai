@@ -46,9 +46,8 @@ export function AppHeader() {
     <AppBar position="static" color="transparent" elevation={0} sx={{ borderBottom: '1px solid', borderColor: 'divider' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box component="img" src="/polyrag.svg" alt="PolyRAG" sx={{ height: 36 }} />
-          <Typography variant="h6" fontWeight={600}>
-            PolyRAG
+          <Typography variant="h5" fontWeight={700} sx={{ color: 'primary.main', letterSpacing: '-0.5px' }}>
+            AdoptiveAI
           </Typography>
         </Box>
 

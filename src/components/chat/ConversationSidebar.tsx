@@ -152,13 +152,9 @@ export function ConversationSidebar({
         />
       )}
       <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Image
-          src="/polyrag.svg"
-          alt="Polyrag Logo"
-          width={150}
-          height={40}
-          priority
-        />
+        <Typography variant="h5" fontWeight={800} sx={{ color: 'primary.main', letterSpacing: '-0.5px' }}>
+          AdoptiveAI
+        </Typography>
         <Box>
           <Tooltip title="Profile">
             <IconButton onClick={() => router.push('/profile')} size="small">

@@ -25,7 +25,7 @@ export function ExamplePrompts({ onSelect }: ExamplePromptsProps) {
           WebkitTextFillColor: 'transparent',
         }}
       >
-        {dt.WELCOME_MESSAGE || 'Welcome to PolyRAG - Your AI Research Assistant'}
+        {dt.WELCOME_MESSAGE || 'Welcome to AdoptiveAI - Your AI Research Assistant'}
       </Typography>
       <Box
         sx={{
