@@ -69,7 +69,7 @@ export const useChatStore = create<ChatStore>()(
       attachedFiles: [],
       suggestedCommand: undefined,
       pdfDialog: null,
-      selectedModel: 'gpt-5-nano',
+      selectedModel: 'gpt-4.1',
 
       setThreadId: (threadId: string) => set({ currentThreadId: threadId }),
       setConversationTitle: (title: string) => set({ conversationTitle: title || DEFAULT_TITLE }),
