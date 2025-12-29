@@ -89,7 +89,14 @@ export function ChatComposer({
             disabled={disabled}
             variant="outlined"
             clickable
-            sx={{ borderRadius: 2 }}
+            sx={{
+              borderRadius: 2,
+              bgcolor: 'background.paper',
+              borderColor: 'divider',
+              '&:hover': {
+                bgcolor: 'action.hover',
+              }
+            }}
           />
         ))}
       </Box>
@@ -133,6 +140,7 @@ export function ChatComposer({
           borderRadius: 4,
           border: '1px solid',
           borderColor: 'divider',
+          bgcolor: 'background.paper',
         }}
       >
         <Tooltip title={dt.FILE_TYPES || 'Attach files'}>

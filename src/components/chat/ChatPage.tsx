@@ -24,6 +24,7 @@ import { ExamplePrompts } from './ExamplePrompts';
 import { PdfViewerDialog } from './PdfViewerDialog';
 import { FeedbackWidget } from './FeedbackWidget';
 import { ModelSelector } from './ModelSelector';
+import { ThemeToggle } from '../layout/ThemeToggle';
 import { useAuthStore } from '@/store/authStore';
 import { useChatStore } from '@/store/chatStore';
 import { agentClient } from '@/services/agentClient';
@@ -486,7 +487,7 @@ export function ChatPage() {
         onWidthChange={setSidebarWidth}
         onAttachFile={attachFile}
       />
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: 'grey.50', minWidth: 0 }}>
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: 'background.default', minWidth: 0 }}>
         <Box sx={{ px: { xs: 2, md: 3 }, py: { xs: 1.5, md: 2 }, borderBottom: '1px solid', borderColor: 'divider', backgroundColor: 'background.paper', display: 'flex', alignItems: 'center', gap: 2 }}>
           {!isSidebarOpen && (
             <IconButton onClick={() => setIsSidebarOpen(true)} edge="start" size="small">
@@ -501,7 +502,8 @@ export function ChatPage() {
               {dt.CAPTION || 'AdoptiveAI - AI Research Assistant'}
             </Typography>
           </Box>
-          <Box sx={{ ml: 'auto' }}>
+          <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center', gap: 1 }}>
+            <ThemeToggle />
             <ModelSelector disabled={isSubmitting} />
           </Box>
         </Box>

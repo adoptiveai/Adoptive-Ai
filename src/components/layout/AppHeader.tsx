@@ -18,6 +18,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuthStore } from '@/store/authStore';
 import { dt } from '@/config/displayTexts';
+import { ThemeToggle } from './ThemeToggle';
 
 export function AppHeader() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export function AppHeader() {
   };
 
   return (
-    <AppBar position="static" color="transparent" elevation={0} sx={{ borderBottom: '1px solid', borderColor: 'divider' }}>
+    <AppBar position="static" color="transparent" elevation={0} sx={{ borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Typography variant="h5" fontWeight={700} sx={{ color: 'primary.main', letterSpacing: '-0.5px' }}>
@@ -60,13 +61,15 @@ export function AppHeader() {
           <Button onClick={() => router.push('/profile')}>
             {user?.email}
           </Button>
+          <ThemeToggle />
           <IconButton color="inherit" onClick={handleLogout}>
             <LogoutIcon />
           </IconButton>
         </Box>
 
         {/* Mobile Menu */}
-        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+        <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
+          <ThemeToggle />
           <IconButton
             size="large"
             onClick={handleOpenMobileMenu}

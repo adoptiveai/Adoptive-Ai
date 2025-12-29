@@ -28,6 +28,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBackRounded';
 import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
 import { useAuthStore } from '@/store/authStore';
 import { dt } from '@/config/displayTexts';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import toast from 'react-hot-toast';
 
 export default function ProfilePage() {
@@ -51,7 +52,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <Box sx={{ minHeight: '100%', bgcolor: 'grey.50', py: { xs: 3, md: 6 } }}>
+    <Box sx={{ minHeight: '100%', bgcolor: 'background.default', py: { xs: 3, md: 6 } }}>
       <Container maxWidth="md">
         <Box sx={{ mb: 4, display: 'flex', alignItems: 'center' }}>
           <Button
@@ -67,6 +68,9 @@ export default function ProfilePage() {
           >
             Back to Chat
           </Button>
+          <Box sx={{ ml: 'auto' }}>
+            <ThemeToggle />
+          </Box>
         </Box>
 
         <Card
@@ -210,7 +214,7 @@ export default function ProfilePage() {
                       border: '1px solid',
                       borderColor: 'divider',
                       borderRadius: 3,
-                      bgcolor: 'grey.50'
+                      bgcolor: 'background.paper',
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>

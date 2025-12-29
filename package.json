@@ -20,7 +20,9 @@
     "chart.js": "^4.5.1",
     "chartjs-plugin-datalabels": "^2.2.0",
     "clsx": "^2.1.1",
+    "lucide-react": "^0.562.0",
     "next": "14.2.23",
+    "next-themes": "^0.4.6",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.4.149",
     "pg": "^8.16.3",
@@ -46,6 +48,3 @@
     "typescript": "^5.9.3"
   }
 }
-
-
-

@@ -2,23 +2,43 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Box, CircularProgress, Stack, Typography } from '@mui/material';
-import * as pdfjsLib from 'pdfjs-dist';
 
-// Set the worker source to unpkg CDN for the installed version
-// Note: We use the version matching package.json (approx 5.4.149)
-// If this fails due to CORS or version mismatch, we might need to copy worker to public/
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+// We'll import pdfjs dynamically to avoid issues with Next.js/ESM at the top level
+// This also helps with some bundler-specific issues with GlobalWorkerOptions
 
 interface MobilePdfViewerProps {
     url: string;
 }
 
 export function MobilePdfViewer({ url }: MobilePdfViewerProps) {
-    const [pdf, setPdf] = useState<pdfjsLib.PDFDocumentProxy | null>(null);
+    const [pdf, setPdf] = useState<any | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const [pdfjs, setPdfjs] = useState<any>(null);
 
     useEffect(() => {
+        const initPdfjs = async () => {
+            try {
+                // Dynamically import pdfjs-dist
+                const lib = await import('pdfjs-dist');
+                // Set worker source
+                if (typeof window !== 'undefined') {
+                    lib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${lib.version}/build/pdf.worker.min.mjs`;
+                }
+                setPdfjs(lib);
+            } catch (err: any) {
+                console.error('Error initializing pdfjs:', err);
+                setError('Failed to initialize PDF viewer');
+                setLoading(false);
+            }
+        };
+
+        initPdfjs();
+    }, []);
+
+    useEffect(() => {
+        if (!pdfjs || !url) return;
+
         let isActive = true;
 
         const loadPdf = async () => {
@@ -27,7 +47,7 @@ export function MobilePdfViewer({ url }: MobilePdfViewerProps) {
                 setError(null);
 
                 // Load the PDF
-                const loadingTask = pdfjsLib.getDocument(url);
+                const loadingTask = pdfjs.getDocument(url);
                 const loadedPdf = await loadingTask.promise;
 
                 if (isActive) {
@@ -43,14 +63,12 @@ export function MobilePdfViewer({ url }: MobilePdfViewerProps) {
             }
         };
 
-        if (url) {
-            loadPdf();
-        }
+        loadPdf();
 
         return () => {
             isActive = false;
         };
-    }, [url]);
+    }, [url, pdfjs]);
 
     if (loading) {
         return (
@@ -82,7 +100,7 @@ export function MobilePdfViewer({ url }: MobilePdfViewerProps) {
     );
 }
 
-function PdfPage({ pdf, pageNumber }: { pdf: pdfjsLib.PDFDocumentProxy; pageNumber: number }) {
+function PdfPage({ pdf, pageNumber }: { pdf: any; pageNumber: number }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [rendered, setRendered] = useState(false);
 
@@ -94,12 +112,10 @@ function PdfPage({ pdf, pageNumber }: { pdf: pdfjsLib.PDFDocumentProxy; pageNumb
                 const page = await pdf.getPage(pageNumber);
 
                 // Adjust scale for mobile screens
-                // Use a reasonable scale like 1.0 or responsive based on window width
-                // For simplicity, we assume standard width fitting
-                const viewport = page.getViewport({ scale: 2.0 }); // Higher scale for better resolution
+                const viewport = page.getViewport({ scale: 2.0 });
 
-                // Calculate scale to fit parent container width, considering device pixel ratio for sharpness
-                const containerWidth = window.innerWidth - 32; // minus padding
+                // Calculate scale to fit parent container width
+                const containerWidth = window.innerWidth - 32;
                 const scale = containerWidth / viewport.width;
                 const scaledViewport = page.getViewport({ scale: scale > 0 ? scale * (window.devicePixelRatio || 1) : 1.0 });
 
@@ -110,7 +126,6 @@ function PdfPage({ pdf, pageNumber }: { pdf: pdfjsLib.PDFDocumentProxy; pageNumb
                 canvas.height = scaledViewport.height;
                 canvas.width = scaledViewport.width;
 
-                // Ensure canvas fits visually within container
                 canvas.style.width = '100%';
                 canvas.style.height = 'auto';
 
@@ -119,7 +134,7 @@ function PdfPage({ pdf, pageNumber }: { pdf: pdfjsLib.PDFDocumentProxy; pageNumb
                     viewport: scaledViewport,
                 };
 
-                await page.render(renderContext as any).promise;
+                await page.render(renderContext).promise;
                 setRendered(true);
             } catch (err) {
                 console.error(`Error rendering page ${pageNumber}:`, err);

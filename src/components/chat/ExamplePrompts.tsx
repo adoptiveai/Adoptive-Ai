@@ -51,17 +51,15 @@ export function ExamplePrompts({ onSelect }: ExamplePromptsProps) {
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               border: '1px solid',
               borderColor: 'divider',
-              background: 'background.paper',
+              bgcolor: 'background.paper',
               display: 'flex',
               alignItems: 'center',
               gap: 2.5,
               '&:hover': {
                 transform: 'translateY(-4px)',
                 boxShadow: '0 12px 24px -10px rgba(0,0,0,0.15)',
-                borderColor: 'transparent',
-                '&::before': {
-                  opacity: 1,
-                },
+                borderColor: 'primary.main',
+                bgcolor: 'action.hover',
                 '& .icon-box': {
                   transform: 'scale(1.1) rotate(5deg)',
                   bgcolor: 'primary.main',

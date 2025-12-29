@@ -26,8 +26,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import { useAuthStore } from '@/store/authStore';
 import type { Conversation } from '@/types/api';
 import { dt } from '@/config/displayTexts';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 
 import Image from 'next/image';
 import { useEffect } from 'react';
@@ -72,6 +76,7 @@ export function ConversationSidebar({
   onAttachFile,
 }: ConversationSidebarProps) {
   const router = useRouter();
+  const { logout } = useAuthStore();
   const [renameDialog, setRenameDialog] = useState<{ threadId: string; title: string } | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -156,6 +161,7 @@ export function ConversationSidebar({
           AdoptiveAI
         </Typography>
         <Box>
+          <ThemeToggle />
           <Tooltip title="Profile">
             <IconButton onClick={() => router.push('/profile')} size="small">
               <PersonIcon />
@@ -298,6 +304,34 @@ export function ConversationSidebar({
           currentThreadId={currentThreadId}
           onAttach={onAttachFile}
         />
+      </Box>
+
+      <Divider />
+
+      <Box sx={{ p: 2 }}>
+        <Stack spacing={1}>
+          <Button
+            variant="text"
+            startIcon={<FeedbackIcon />}
+            onClick={() => router.push('/feedback')}
+            fullWidth
+            sx={{ justifyContent: 'flex-start', color: 'text.secondary' }}
+          >
+            {dt.FEEDBACK || 'Feedback'}
+          </Button>
+          <Button
+            variant="text"
+            startIcon={<LogoutIcon />}
+            onClick={() => {
+              logout();
+              window.location.href = '/login';
+            }}
+            fullWidth
+            sx={{ justifyContent: 'flex-start', color: 'error.main' }}
+          >
+            {dt.LOGOUT || 'Sign Out'}
+          </Button>
+        </Stack>
       </Box>
     </Box>
   );
