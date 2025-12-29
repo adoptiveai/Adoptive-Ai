@@ -37,7 +37,7 @@ export function ChatPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const nextThreadId = searchParams?.get('thread');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const [inputValue, setInputValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,9 +94,8 @@ export function ChatPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
-    if (isMobile) {
-      setIsSidebarOpen(false);
-    } else {
+    // Only auto-open on desktop if it wasn't explicitly interacted with (simple logic for now)
+    if (!isMobile) {
       setIsSidebarOpen(true);
     }
   }, [isMobile]);
@@ -471,7 +470,7 @@ export function ChatPage() {
   const lastAiMessage = [...messages].reverse().find((message) => message.type === 'ai');
 
   return (
-    <Box sx={{ display: 'flex', height: '100%', flexDirection: 'row', overflow: 'hidden' }}>
+    <Box sx={{ display: 'flex', flex: 1, height: '100%', flexDirection: 'row', overflow: 'hidden' }}>
       <ConversationSidebar
         conversations={conversations}
         currentThreadId={currentThreadId}
