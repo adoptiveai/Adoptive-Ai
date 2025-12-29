@@ -137,7 +137,7 @@ export function PdfViewerDialog({ open, documentName, blockIndices, debug, keywo
       <DialogTitle>
         {debug ? dt.PDF_DIALOG_DEBUG_PREFIX + ' ' + documentName : dt.PDF_DIALOG_TITLE || 'PDF Viewer'}
       </DialogTitle>
-      <DialogContent dividers sx={{ minHeight: '100%' }}>
+      <DialogContent dividers={!isMobile} sx={{ p: isMobile ? 0 : 2, flex: 1, display: 'flex', flexDirection: 'column' }}>
         {state.loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <CircularProgress />
@@ -145,8 +145,8 @@ export function PdfViewerDialog({ open, documentName, blockIndices, debug, keywo
         )}
         {!state.loading && state.error && <Alert severity="error">{state.error}</Alert>}
         {!state.loading && state.url && (
-          <Stack spacing={2} sx={{ height: '100%', minHeight: { xs: 'calc(100vh - 100px)', md: '80vh' } }}>
-            <Box sx={{ flex: 1, height: '100%' }}>
+          <Stack spacing={2} sx={{ flex: 1, minHeight: 0 }}>
+            <Box sx={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
               {isMobile ? (
                 <MobilePdfViewer url={state.url} />
               ) : (

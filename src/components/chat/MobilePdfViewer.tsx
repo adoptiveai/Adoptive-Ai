@@ -71,8 +71,8 @@ export function MobilePdfViewer({ url }: MobilePdfViewerProps) {
     if (!pdf) return null;
 
     return (
-        <Stack spacing={2} alignItems="center" sx={{ width: '100%', overflowY: 'auto', p: 1 }}>
-            <Typography variant="caption" color="text.secondary">
+        <Stack spacing={2} alignItems="center" sx={{ width: '100%', height: '100%', overflowY: 'auto', p: 1, flex: 1 }}>
+            <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
                 Rendering {pdf.numPages} pages via Canvas (Mobile Mode)
             </Typography>
             {Array.from(new Array(pdf.numPages), (el, index) => (
@@ -96,15 +96,12 @@ function PdfPage({ pdf, pageNumber }: { pdf: pdfjsLib.PDFDocumentProxy; pageNumb
                 // Adjust scale for mobile screens
                 // Use a reasonable scale like 1.0 or responsive based on window width
                 // For simplicity, we assume standard width fitting
-                const viewport = page.getViewport({ scale: 1.0 });
+                const viewport = page.getViewport({ scale: 2.0 }); // Higher scale for better resolution
 
-                // Calculate scale to fit parent container width if possible
-                // But for now, let's render nicely
-                // A better approach is to get container width.
-                // Let's stick effectively to window.innerWidth usually on mobile
+                // Calculate scale to fit parent container width, considering device pixel ratio for sharpness
                 const containerWidth = window.innerWidth - 32; // minus padding
                 const scale = containerWidth / viewport.width;
-                const scaledViewport = page.getViewport({ scale: scale > 0 ? scale : 1.0 });
+                const scaledViewport = page.getViewport({ scale: scale > 0 ? scale * (window.devicePixelRatio || 1) : 1.0 });
 
                 const canvas = canvasRef.current;
                 const context = canvas.getContext('2d');
@@ -112,6 +109,10 @@ function PdfPage({ pdf, pageNumber }: { pdf: pdfjsLib.PDFDocumentProxy; pageNumb
 
                 canvas.height = scaledViewport.height;
                 canvas.width = scaledViewport.width;
+
+                // Ensure canvas fits visually within container
+                canvas.style.width = '100%';
+                canvas.style.height = 'auto';
 
                 const renderContext = {
                     canvasContext: context,
@@ -129,8 +130,8 @@ function PdfPage({ pdf, pageNumber }: { pdf: pdfjsLib.PDFDocumentProxy; pageNumb
     }, [pdf, pageNumber]);
 
     return (
-        <Box sx={{ boxShadow: 1, borderRadius: 1, bgcolor: 'background.paper', overflow: 'hidden' }}>
-            <canvas ref={canvasRef} style={{ display: 'block', maxWidth: '100%' }} />
+        <Box sx={{ boxShadow: 1, borderRadius: 1, bgcolor: 'background.paper', overflow: 'hidden', width: '100%' }}>
+            <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: 'auto' }} />
         </Box>
     );
 }
