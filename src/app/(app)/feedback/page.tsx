@@ -34,8 +34,8 @@ export default function FeedbackPage() {
   };
 
   return (
-    <Box sx={{ p: 4, maxWidth: 720, margin: '0 auto' }}>
-      <Paper elevation={2} sx={{ p: 4 }}>
+    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 720, margin: '0 auto' }}>
+      <Paper elevation={2} sx={{ p: { xs: 3, md: 4 } }}>
         <Stack spacing={3}>
           <Typography variant="h5" fontWeight={600}>
             {dt.FEEDBACK || 'Feedback'}

@@ -78,7 +78,7 @@ export function ChatComposer({
   const suggestedPrompts = allPrompts.filter(p => !p.requiresViewPermission || canViewDocuments);
 
   return (
-    <Stack spacing={2} sx={{ px: 3, pb: 3, width: '100%' }}>
+    <Stack spacing={2} sx={{ px: { xs: 2, md: 3 }, pb: { xs: 2, md: 3 }, width: '100%' }}>
       {/* Suggested Prompts */}
       <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1, '::-webkit-scrollbar': { display: 'none' } }}>
         {suggestedPrompts.map((prompt) => (

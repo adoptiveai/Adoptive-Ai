@@ -53,7 +53,7 @@ export function LoginForm() {
       }}
     >
       <Card sx={{ maxWidth: 420, width: '100%', boxShadow: 8 }}>
-        <CardContent sx={{ p: 4 }}>
+        <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
           <Stack spacing={3}>
             <Stack spacing={1.5} alignItems="center">
               <Box component="img" src="/polyrag.svg" alt="PolyRAG" sx={{ height: 56 }} />

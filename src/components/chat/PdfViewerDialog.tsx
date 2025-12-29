@@ -12,6 +12,8 @@ import {
   Stack,
   Typography,
   Alert,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { agentClient } from '@/services/agentClient';
 import type { AnnotationItem } from '@/types/api';
@@ -46,6 +48,9 @@ export function PdfViewerDialog({ open, documentName, blockIndices, debug, keywo
   const [state, setState] = useState<PdfState>(initialState);
   const blockSignature = blockIndices?.join(',') ?? '';
   const keywordsSignature = keywords?.join(',') ?? '';
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     if (!open || !documentName) return;
@@ -127,7 +132,7 @@ export function PdfViewerDialog({ open, documentName, blockIndices, debug, keywo
   }, [open, documentName, debug, userId, blockSignature, blockIndices, keywordsSignature, keywords]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xl">
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xl" fullScreen={isMobile}>
       <DialogTitle>
         {debug ? dt.PDF_DIALOG_DEBUG_PREFIX + ' ' + documentName : dt.PDF_DIALOG_TITLE || 'PDF Viewer'}
       </DialogTitle>
@@ -139,9 +144,9 @@ export function PdfViewerDialog({ open, documentName, blockIndices, debug, keywo
         )}
         {!state.loading && state.error && <Alert severity="error">{state.error}</Alert>}
         {!state.loading && state.url && (
-          <Stack spacing={2} sx={{ height: '100%', minHeight: 1080 }}>
-            <Box sx={{ flex: 1 }}>
-              <iframe src={state.url} title={documentName} style={{ width: '100%', height: 1000, border: 0 }} />
+          <Stack spacing={2} sx={{ height: '100%', minHeight: { xs: 'calc(100vh - 100px)', md: '80vh' } }}>
+            <Box sx={{ flex: 1, height: '100%' }}>
+              <iframe src={state.url} title={documentName} style={{ width: '100%', height: '100%', minHeight: isMobile ? 'calc(100vh - 150px)' : '800px', border: 0 }} />
             </Box>
             {state.annotations.length > 0 && (
               <Box>

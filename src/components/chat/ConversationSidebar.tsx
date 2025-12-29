@@ -36,7 +36,7 @@ import type { UploadedFile } from '@/types/api';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { Accordion, AccordionSummary, AccordionDetails, Paper, IconButton as MuiIconButton } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails, Paper, IconButton as MuiIconButton, useTheme, useMediaQuery, Drawer } from '@mui/material';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
@@ -114,23 +114,22 @@ export function ConversationSidebar({
     setDeleteConfirm(null);
   };
 
-  return (
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const SidebarContent = (
     <Box
       sx={{
-        width: isOpen ? width : 0,
-        transition: isResizing ? 'none' : 'width 0.3s ease',
-        overflow: isOpen ? 'visible' : 'hidden',
-        borderRight: isOpen ? '1px solid' : 'none',
-        borderColor: 'divider',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: 'background.paper',
         whiteSpace: 'nowrap',
         position: 'relative',
+        minWidth: isMobile ? 280 : undefined,
       }}
     >
-      {isOpen && (
+      {!isMobile && isOpen && (
         <Box
           onMouseDown={() => setIsResizing(true)}
           sx={{
@@ -166,11 +165,19 @@ export function ConversationSidebar({
               <PersonIcon />
             </IconButton>
           </Tooltip>
-          <IconButton onClick={onToggle} size="small">
-            <MenuOpenIcon />
-          </IconButton>
+          {!isMobile && (
+            <IconButton onClick={onToggle} size="small">
+              <MenuOpenIcon />
+            </IconButton>
+          )}
+          {isMobile && (
+            <IconButton onClick={onToggle} size="small">
+              <MenuOpenIcon sx={{ transform: 'rotate(180deg)' }} />
+            </IconButton>
+          )}
         </Box>
       </Box>
+
       <Divider />
       <Box sx={{ p: 2 }}>
         <Stack direction="row" spacing={1} alignItems="center">
@@ -296,6 +303,42 @@ export function ConversationSidebar({
           onAttach={onAttachFile}
         />
       </Box>
+    </Box>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer
+        variant="temporary"
+        open={isOpen}
+        onClose={onToggle}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 300 },
+        }}
+      >
+        {SidebarContent}
+      </Drawer>
+    );
+  }
+
+  return (
+    <Box
+      sx={{
+        width: isOpen ? width : 0,
+        transition: isResizing ? 'none' : 'width 0.3s ease',
+        overflow: isOpen ? 'visible' : 'hidden',
+        borderRight: isOpen ? '1px solid' : 'none',
+        borderColor: 'divider',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'background.paper',
+        whiteSpace: 'nowrap',
+        position: 'relative',
+      }}
+    >
+      {SidebarContent}
     </Box>
   );
 }

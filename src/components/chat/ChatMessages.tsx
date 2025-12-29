@@ -343,14 +343,14 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
   }
 
   return (
-    <Stack spacing={2} sx={{ flex: 1, overflowY: 'auto', px: 3, py: 4 }}>
+    <Stack spacing={2} sx={{ flex: 1, overflowY: 'auto', px: { xs: 2, md: 3 }, py: { xs: 2, md: 4 } }}>
       {groupedMessages.map((groupOrMessage, index) => {
         if (Array.isArray(groupOrMessage)) {
           // It's a group of tool messages
           return (
             <Stack key={`tool-group-${index}`} direction="row" spacing={2} alignItems="flex-start">
               <Avatar sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>{aiIcon}</Avatar>
-              <Box sx={{ maxWidth: '80%', width: '100%' }}>
+              <Box sx={{ maxWidth: { xs: '90%', md: '80%' }, width: '100%' }}>
                 <ThinkingProcess
                   messages={groupOrMessage}
                   renderToolDetails={renderToolDetails}
@@ -365,7 +365,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
         if (message.type === 'human') {
           return (
             <Stack key={index} direction="row" justifyContent="flex-end" spacing={2}>
-              <Stack spacing={1} alignItems="flex-end" maxWidth="70%">
+              <Stack spacing={1} alignItems="flex-end" maxWidth={{ xs: '85%', md: '70%' }}>
                 {message.attached_files?.length ? (
                   <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
                     {message.attached_files.map((file) => (
@@ -402,7 +402,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
                 <Avatar sx={{ bgcolor: 'primary.light', color: 'primary.contrastText' }}>
                   <ArticleIcon />
                 </Avatar>
-                <Stack spacing={1.5} sx={{ maxWidth: '70%', width: '100%' }}>
+                <Stack spacing={1.5} sx={{ maxWidth: { xs: '85%', md: '70%' }, width: '100%' }}>
                   {(message.custom_data.entries as PdfEntry[]).map((entry, idx) => (
                     <Paper key={idx} elevation={2} sx={{ p: 2, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
                       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
@@ -442,7 +442,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
             return (
               <Stack key={index} direction="row" spacing={2} alignItems="flex-start">
                 <Avatar sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>{aiIcon}</Avatar>
-                <Box sx={{ maxWidth: '80%', width: '100%' }}>
+                <Box sx={{ maxWidth: { xs: '90%', md: '80%' }, width: '100%' }}>
                   <GraphViewer figure={graphFigure} />
                   <InteractiveChart figure={graphFigure} />
                 </Box>
@@ -454,7 +454,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
           return (
             <Stack key={`tool-single-${index}`} direction="row" spacing={2} alignItems="flex-start">
               <Avatar sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>{aiIcon}</Avatar>
-              <Box sx={{ maxWidth: '80%', width: '100%' }}>
+              <Box sx={{ maxWidth: { xs: '90%', md: '80%' }, width: '100%' }}>
                 <ThinkingProcess
                   messages={[message]}
                   renderToolDetails={renderToolDetails}
@@ -470,7 +470,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
               <Avatar sx={{ bgcolor: 'grey.200', color: 'grey.800' }}>
                 <MarkUnreadChatAltIcon />
               </Avatar>
-              <Paper elevation={1} sx={{ px: 2.5, py: 2, borderRadius: 3, maxWidth: '70%' }}>
+              <Paper elevation={1} sx={{ px: 2.5, py: 2, borderRadius: 3, maxWidth: { xs: '85%', md: '70%' } }}>
                 <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
                   {message.content}
                 </Typography>
@@ -498,7 +498,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
         return (
           <Stack key={index} direction="row" spacing={2} alignItems="flex-start">
             <Avatar sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>{aiIcon}</Avatar>
-            <Paper elevation={1} sx={{ px: 2.5, py: 2, borderRadius: 3, maxWidth: '70%' }}>
+            <Paper elevation={1} sx={{ px: 2.5, py: 2, borderRadius: 3, maxWidth: { xs: '85%', md: '70%' } }}>
               <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
                 {message.content ? (
                   isLastMessage && message.type === 'ai' ? (

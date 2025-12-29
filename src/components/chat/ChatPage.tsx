@@ -10,6 +10,8 @@ import {
   IconButton,
   Stack,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
@@ -87,6 +89,17 @@ export function ChatPage() {
   } = useChatStore();
 
   const userId = user?.id;
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  useEffect(() => {
+    if (isMobile) {
+      setIsSidebarOpen(false);
+    } else {
+      setIsSidebarOpen(true);
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     if (!currentThreadId) {
@@ -475,7 +488,7 @@ export function ChatPage() {
         onAttachFile={attachFile}
       />
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: 'grey.50', minWidth: 0 }}>
-        <Box sx={{ px: 3, py: 2, borderBottom: '1px solid', borderColor: 'divider', backgroundColor: 'background.paper', display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ px: { xs: 2, md: 3 }, py: { xs: 1.5, md: 2 }, borderBottom: '1px solid', borderColor: 'divider', backgroundColor: 'background.paper', display: 'flex', alignItems: 'center', gap: 2 }}>
           {!isSidebarOpen && (
             <IconButton onClick={() => setIsSidebarOpen(true)} edge="start" size="small">
               <MenuIcon />
@@ -497,7 +510,7 @@ export function ChatPage() {
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <Box sx={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ flex: 1, overflowY: 'auto' }}>
-              <Stack sx={{ px: 3, pt: 3 }} spacing={2}>
+              <Stack sx={{ px: { xs: 2, md: 3 }, pt: 3 }} spacing={2}>
                 {showExamplePrompts && <ExamplePrompts onSelect={handlePromptSelect} />}
                 {error && <Alert severity="error">{error}</Alert>}
               </Stack>
