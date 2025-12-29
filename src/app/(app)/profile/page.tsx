@@ -51,7 +51,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50', py: 6 }}>
+    <Box sx={{ minHeight: '100%', bgcolor: 'grey.50', py: { xs: 3, md: 6 } }}>
       <Container maxWidth="md">
         <Box sx={{ mb: 4, display: 'flex', alignItems: 'center' }}>
           <Button
@@ -106,7 +106,7 @@ export default function ProfilePage() {
                 display: 'flex',
                 justifyContent: 'center',
                 transform: 'translateY(-50%)',
-                mb: -6,
+                mb: { xs: -4, md: -6 },
               }}
             >
               <Avatar
@@ -147,7 +147,7 @@ export default function ProfilePage() {
             <Divider sx={{ mb: 6 }} />
 
             <Grid container spacing={4}>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Typography variant="overline" color="text.secondary" fontWeight={700} sx={{ letterSpacing: 1.5, mb: 2, display: 'block' }}>
                   ACCOUNT DETAILS
                 </Typography>
@@ -197,7 +197,7 @@ export default function ProfilePage() {
                 </Stack>
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Typography variant="overline" color="text.secondary" fontWeight={700} sx={{ letterSpacing: 1.5, mb: 2, display: 'block' }}>
                   SECURITY
                 </Typography>

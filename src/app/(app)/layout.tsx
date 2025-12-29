@@ -5,8 +5,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
   return (
     <AuthGuard>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
-        <AppHeader />
-        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>{children}</main>
+        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflowY: 'auto', overflowX: 'hidden' }}>{children}</main>
       </div>
     </AuthGuard>
   );

@@ -508,41 +508,48 @@ export function ChatPage() {
 
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <Box sx={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-            <Box sx={{ flex: 1, overflowY: 'auto' }}>
-              <Stack sx={{ px: { xs: 2, md: 3 }, pt: 3 }} spacing={2}>
-                {showExamplePrompts && <ExamplePrompts onSelect={handlePromptSelect} />}
-                {error && <Alert severity="error">{error}</Alert>}
-              </Stack>
-              <ChatMessages messages={messages} onOpenPdf={handleOpenPdf} conversationId={currentThreadId} />
+            <Box sx={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+              {showExamplePrompts ? (
+                <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', p: 3 }}>
+                  <ExamplePrompts onSelect={handlePromptSelect} />
+                </Box>
+              ) : (
+                <>
+                  <Stack sx={{ px: { xs: 2, md: 3 }, pt: 3 }} spacing={2}>
+                    {error && <Alert severity="error">{error}</Alert>}
+                  </Stack>
+                  <ChatMessages messages={messages} onOpenPdf={handleOpenPdf} conversationId={currentThreadId} />
+                </>
+              )}
+            </Box>
+            <Box>
+              <ChatComposer
+                value={inputValue}
+                onChange={setInputValue}
+                onSubmit={() => handleSendMessage()}
+                onQuickSubmit={handleSendMessage}
+                disabled={isSubmitting}
+                selectedFiles={selectedFiles}
+                onFilesSelected={handleFilesSelected}
+                onRemoveFile={removeFile}
+                attachedFiles={attachedFiles}
+                onDetachFile={detachFile}
+                suggestedCommand={suggestedCommand}
+                onClearSuggestion={() => setSuggestedCommand(undefined)}
+              />
             </Box>
           </Box>
-          <Box>
-            <ChatComposer
-              value={inputValue}
-              onChange={setInputValue}
-              onSubmit={() => handleSendMessage()}
-              onQuickSubmit={handleSendMessage}
-              disabled={isSubmitting}
-              selectedFiles={selectedFiles}
-              onFilesSelected={handleFilesSelected}
-              onRemoveFile={removeFile}
-              attachedFiles={attachedFiles}
-              onDetachFile={detachFile}
-              suggestedCommand={suggestedCommand}
-              onClearSuggestion={() => setSuggestedCommand(undefined)}
-            />
-          </Box>
         </Box>
+        <PdfViewerDialog
+          open={Boolean(pdfDialog?.open && pdfDialog.documentName)}
+          documentName={pdfDialog?.documentName}
+          blockIndices={pdfDialog?.blockIndices}
+          debug={pdfDialog?.debug}
+          keywords={pdfDialog?.keywords}
+          onClose={() => setPdfDialog(null)}
+          userId={userId}
+        />
       </Box>
-      <PdfViewerDialog
-        open={Boolean(pdfDialog?.open && pdfDialog.documentName)}
-        documentName={pdfDialog?.documentName}
-        blockIndices={pdfDialog?.blockIndices}
-        debug={pdfDialog?.debug}
-        keywords={pdfDialog?.keywords}
-        onClose={() => setPdfDialog(null)}
-        userId={userId}
-      />
     </Box>
   );
 }
