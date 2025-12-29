@@ -19,6 +19,7 @@ import { agentClient } from '@/services/agentClient';
 import type { AnnotationItem } from '@/types/api';
 import { dt } from '@/config/displayTexts';
 import { PDFDocument, rgb } from 'pdf-lib';
+import { MobilePdfViewer } from './MobilePdfViewer';
 
 interface PdfViewerDialogProps {
   open: boolean;
@@ -146,14 +147,18 @@ export function PdfViewerDialog({ open, documentName, blockIndices, debug, keywo
         {!state.loading && state.url && (
           <Stack spacing={2} sx={{ height: '100%', minHeight: { xs: 'calc(100vh - 100px)', md: '80vh' } }}>
             <Box sx={{ flex: 1, height: '100%' }}>
-              <object data={state.url} type="application/pdf" width="100%" height="100%" style={{ minHeight: isMobile ? 'calc(100vh - 150px)' : '800px' }}>
-                <p>
-                  Your browser does not support PDF embedding.
-                  <a href={state.url} download={documentName} target="_blank" rel="noopener noreferrer">
-                    Download PDF
-                  </a>
-                </p>
-              </object>
+              {isMobile ? (
+                <MobilePdfViewer url={state.url} />
+              ) : (
+                <object data={state.url} type="application/pdf" width="100%" height="100%" style={{ minHeight: '800px' }}>
+                  <p>
+                    Your browser does not support PDF embedding.
+                    <a href={state.url} download={documentName} target="_blank" rel="noopener noreferrer">
+                      Download PDF
+                    </a>
+                  </p>
+                </object>
+              )}
             </Box>
             {state.annotations.length > 0 && (
               <Box>
