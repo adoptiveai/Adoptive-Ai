@@ -146,7 +146,14 @@ export function PdfViewerDialog({ open, documentName, blockIndices, debug, keywo
         {!state.loading && state.url && (
           <Stack spacing={2} sx={{ height: '100%', minHeight: { xs: 'calc(100vh - 100px)', md: '80vh' } }}>
             <Box sx={{ flex: 1, height: '100%' }}>
-              <iframe src={state.url} title={documentName} style={{ width: '100%', height: '100%', minHeight: isMobile ? 'calc(100vh - 150px)' : '800px', border: 0 }} />
+              <object data={state.url} type="application/pdf" width="100%" height="100%" style={{ minHeight: isMobile ? 'calc(100vh - 150px)' : '800px' }}>
+                <p>
+                  Your browser does not support PDF embedding.
+                  <a href={state.url} download={documentName} target="_blank" rel="noopener noreferrer">
+                    Download PDF
+                  </a>
+                </p>
+              </object>
             </Box>
             {state.annotations.length > 0 && (
               <Box>
