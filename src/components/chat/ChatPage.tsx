@@ -471,7 +471,7 @@ export function ChatPage() {
   const lastAiMessage = [...messages].reverse().find((message) => message.type === 'ai');
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh' }}>
+    <Box sx={{ display: 'flex', height: '100%', flexDirection: 'row', overflow: 'hidden' }}>
       <ConversationSidebar
         conversations={conversations}
         currentThreadId={currentThreadId}
