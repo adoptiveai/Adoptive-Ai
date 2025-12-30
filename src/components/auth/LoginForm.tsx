@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Alert,
@@ -20,7 +20,13 @@ import { dt } from '@/config/displayTexts';
 
 export function LoginForm() {
   const router = useRouter();
-  const { login, isLoading, error, clearError } = useAuthStore();
+  const { login, isLoading, error, clearError, isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/chat');
+    }
+  }, [isAuthenticated, router]);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,6 +46,14 @@ export function LoginForm() {
   };
 
   const canSubmit = !!email && !!password;
+
+  if (isAuthenticated) {
+    return (
+      <Box sx={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box
