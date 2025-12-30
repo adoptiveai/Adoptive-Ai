@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Plotly, { Data, Layout, Config } from 'plotly.js-dist-min';
-import { Box, Paper, FormControl, InputLabel, Select, MenuItem, Stack, useTheme } from '@mui/material';
+import { Box, Paper, FormControl, InputLabel, Select, MenuItem, Stack, useTheme, useMediaQuery } from '@mui/material';
 
 export interface GraphViewerProps {
   figure: {
@@ -17,6 +17,7 @@ export function GraphViewer({ figure, title }: GraphViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [chartType, setChartType] = useState<string>('bar');
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -72,12 +73,14 @@ export function GraphViewer({ figure, title }: GraphViewerProps) {
 
     const defaultLayout: Partial<Layout> = {
       autosize: true,
-      margin: { l: 50, r: 50, t: 50, b: 50 },
+      margin: isMobile
+        ? { l: 30, r: 10, t: 30, b: 30 }
+        : { l: 50, r: 50, t: 50, b: 50 },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
       font: {
         family: 'Inter, Roboto, sans-serif',
-        size: 12,
+        size: isMobile ? 10 : 12,
         color: textColor
       },
       xaxis: {
@@ -93,14 +96,18 @@ export function GraphViewer({ figure, title }: GraphViewerProps) {
       legend: {
         font: {
           color: textColor,
-        }
+        },
+        // On mobile, maybe hide logical legend or adjust? 
+        // Plotly handles it relatively well, but we can forcing orientation if needed
+        orientation: isMobile ? 'h' : 'v',
+        y: isMobile ? -0.2 : 1,
       },
       ...restLayout,
     };
 
     // Default config matching react-frontend
     const defaultConfig: Partial<Config> = {
-      displayModeBar: true,
+      displayModeBar: !isMobile, // Hide mode bar on mobile to save space
       displaylogo: false,
       modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d'],
       responsive: true,
@@ -114,13 +121,13 @@ export function GraphViewer({ figure, title }: GraphViewerProps) {
     return () => {
       Plotly.purge(node);
     };
-  }, [figure, chartType, theme]);
+  }, [figure, chartType, theme, isMobile]);
 
   return (
-    <Paper elevation={2} sx={{ p: 2, borderRadius: 2, width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
+    <Paper elevation={2} sx={{ p: isMobile ? 1 : 2, borderRadius: 2, width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-        {title && <h4 style={{ margin: 0 }}>{title}</h4>}
-        <FormControl size="small" sx={{ minWidth: 120 }}>
+        {title && <h4 style={{ margin: 0, fontSize: isMobile ? '0.9rem' : '1rem' }}>{title}</h4>}
+        <FormControl size="small" sx={{ minWidth: isMobile ? 100 : 120 }}>
           <InputLabel id="chart-type-label">Chart Type</InputLabel>
           <Select
             labelId="chart-type-label"
@@ -136,7 +143,7 @@ export function GraphViewer({ figure, title }: GraphViewerProps) {
           </Select>
         </FormControl>
       </Stack>
-      <Box ref={containerRef} sx={{ width: '100%', height: 360 }} />
+      <Box ref={containerRef} sx={{ width: '100%', height: isMobile ? 300 : 360 }} />
     </Paper>
   );
 }

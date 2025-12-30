@@ -17,7 +17,7 @@ import {
 } from 'chart.js';
 import { Bar, Line, Scatter, Pie } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Box, Paper, Typography, Stack, FormControl, InputLabel, Select, MenuItem, useTheme } from '@mui/material';
+import { Box, Paper, Typography, Stack, FormControl, InputLabel, Select, MenuItem, useTheme, useMediaQuery } from '@mui/material';
 import { useMemo, useState } from 'react';
 import type { GraphViewerProps } from './GraphViewer';
 
@@ -205,6 +205,7 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
     }, [plotlyData, chartType]);
 
     const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const options = useMemo<ChartOptions<'bar' | 'line' | 'scatter' | 'pie'>>(() => {
         const textColor = theme.palette.text.primary;
@@ -220,12 +221,19 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
                     position: 'top' as const,
                     labels: {
                         color: textColor,
+                        font: {
+                            size: isMobile ? 10 : 12
+                        },
+                        boxWidth: isMobile ? 20 : 40,
                     }
                 },
                 title: {
                     display: !!title || !!layout?.title,
                     text: title || (typeof layout?.title === 'string' ? layout.title : layout?.title?.text) || '',
                     color: textColor,
+                    font: {
+                        size: isMobile ? 12 : 14
+                    }
                 },
                 tooltip: {
                     mode: 'index',
@@ -235,13 +243,15 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
                     bodyColor: tooltipText,
                     borderColor: gridColor,
                     borderWidth: 1,
+                    titleFont: { size: isMobile ? 11 : 13 },
+                    bodyFont: { size: isMobile ? 10 : 12 },
                 },
                 datalabels: {
                     display: chartType === 'pie',
                     color: '#fff',
                     font: {
                         weight: 'bold',
-                        size: 14
+                        size: isMobile ? 10 : 14
                     },
                     formatter: (value: any, context: any) => {
                         const datapoints = context.dataset.data;
@@ -258,6 +268,9 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
                         display: !!layout?.yaxis?.title,
                         text: (typeof layout?.yaxis?.title === 'string' ? layout.yaxis.title : layout?.yaxis?.title?.text) || '',
                         color: textColor,
+                        font: {
+                            size: isMobile ? 10 : 12
+                        }
                     },
                     display: chartType !== 'pie', // Hide Y axis for pie chart
                     grid: {
@@ -265,6 +278,9 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
                     },
                     ticks: {
                         color: textColor,
+                        font: {
+                            size: isMobile ? 9 : 12
+                        }
                     }
                 },
                 x: {
@@ -272,6 +288,9 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
                         display: !!layout?.xaxis?.title,
                         text: (typeof layout?.xaxis?.title === 'string' ? layout.xaxis.title : layout?.xaxis?.title?.text) || '',
                         color: textColor,
+                        font: {
+                            size: isMobile ? 10 : 12
+                        }
                     },
                     display: chartType !== 'pie', // Hide X axis for pie chart
                     grid: {
@@ -279,11 +298,14 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
                     },
                     ticks: {
                         color: textColor,
+                        font: {
+                            size: isMobile ? 9 : 12
+                        }
                     }
                 }
             },
         };
-    }, [title, layout, chartType, theme]);
+    }, [title, layout, chartType, theme, isMobile]);
 
     const renderChart = () => {
         switch (chartType) {
@@ -300,12 +322,12 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
     };
 
     return (
-        <Paper elevation={2} sx={{ p: 2, borderRadius: 2, width: '100%', maxWidth: '100%', overflow: 'hidden', mt: 2, border: '1px solid #e0e0e0' }}>
+        <Paper elevation={2} sx={{ p: isMobile ? 1 : 2, borderRadius: 2, width: '100%', maxWidth: '100%', overflow: 'hidden', mt: 2, border: '1px solid #e0e0e0' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-                <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 600 }}>
+                <Typography variant="h6" sx={{ fontSize: isMobile ? '0.9rem' : '1rem', fontWeight: 600 }}>
                     Interactive Graph (Chart.js)
                 </Typography>
-                <FormControl size="small" sx={{ minWidth: 120 }}>
+                <FormControl size="small" sx={{ minWidth: isMobile ? 100 : 120 }}>
                     <InputLabel id="interactive-chart-type-label">Chart Type</InputLabel>
                     <Select
                         labelId="interactive-chart-type-label"
@@ -321,7 +343,7 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
                     </Select>
                 </FormControl>
             </Stack>
-            <Box sx={{ width: '100%', height: 360 }}>
+            <Box sx={{ width: '100%', height: isMobile ? 300 : 360 }}>
                 {renderChart()}
             </Box>
         </Paper>
