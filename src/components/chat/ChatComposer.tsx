@@ -145,7 +145,7 @@ export function ChatComposer({
       >
         <Tooltip title={dt.FILE_TYPES || 'Attach files'}>
           <span>
-            <IconButton component="label" disabled={disabled} sx={{ p: '10px' }}>
+            <IconButton component="label" disabled={disabled} sx={{ p: 2 }}>
               <AttachFileIcon />
               <input hidden multiple type="file" onChange={handleFileChange} />
             </IconButton>
@@ -162,12 +162,13 @@ export function ChatComposer({
           fullWidth
           sx={{
             '& fieldset': { border: 'none' },
-            '& .MuiInputBase-input': { py: 1.5 },
+            '& .MuiInputBase-input': { py: 2 }, // Keep at 1 (8px) for balance? Or 0.5? Let's try 1 first but with 0 root padding.
+            p: 0, // Ensure root has 0 padding
           }}
         />
 
         {value && (
-          <IconButton onClick={() => onChange('')} disabled={disabled} sx={{ p: '10px' }}>
+          <IconButton onClick={() => onChange('')} disabled={disabled} sx={{ p: 2 }}>
             <ClearIcon />
           </IconButton>
         )}
@@ -178,13 +179,13 @@ export function ChatComposer({
               color="primary"
               onClick={onSubmit}
               disabled={disabled || (!value.trim() && selectedFiles.length === 0 && attachedFiles.length === 0)}
-              sx={{ p: '10px' }}
+              sx={{ p: 2 }}
             >
               <SendIcon />
             </IconButton>
           </span>
         </Tooltip>
       </Paper>
-    </Stack>
+    </Stack >
   );
 }
