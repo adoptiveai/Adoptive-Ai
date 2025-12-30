@@ -93,10 +93,10 @@ export function ChatComposer({
               cursor: disabled ? 'default' : 'pointer',
               bgcolor: 'action.hover', // Subtle background
               color: 'text.primary',
-              py: 0.75,
-              px: 2,
+              py: { xs: 0.5, md: 0.75 },
+              px: { xs: 1.5, md: 2 },
               borderRadius: 4, // Pill shape
-              fontSize: '0.85rem',
+              fontSize: { xs: '0.75rem', md: '0.85rem' },
               fontWeight: 500,
               transition: 'all 0.2s ease-in-out',
               whiteSpace: 'nowrap',
