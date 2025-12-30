@@ -216,6 +216,11 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
         return {
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    right: isMobile ? 20 : 0
+                }
+            },
             plugins: {
                 legend: {
                     position: 'top' as const,

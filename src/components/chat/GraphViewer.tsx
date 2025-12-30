@@ -74,7 +74,7 @@ export function GraphViewer({ figure, title }: GraphViewerProps) {
     const defaultLayout: Partial<Layout> = {
       autosize: true,
       margin: isMobile
-        ? { l: 30, r: 10, t: 30, b: 30 }
+        ? { l: 30, r: 25, t: 30, b: 30 }
         : { l: 50, r: 50, t: 50, b: 50 },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',

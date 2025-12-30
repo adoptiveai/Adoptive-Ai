@@ -352,7 +352,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
   }
 
   return (
-    <Stack spacing={2} sx={{ flex: 1, overflowY: 'auto', px: { xs: 2, md: 3 }, py: { xs: 2, md: 4 } }}>
+    <Stack spacing={2} sx={{ flex: 1, overflowY: 'auto', px: { xs: 3, md: 3 }, py: { xs: 2, md: 4 } }}>
       {groupedMessages.map((groupOrMessage, index) => {
         if (Array.isArray(groupOrMessage)) {
           // It's a group of tool messages
@@ -453,7 +453,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
             return (
               <Stack key={index} direction="row" spacing={2} alignItems="flex-start">
                 <Avatar sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>{aiIcon}</Avatar>
-                <Box sx={{ maxWidth: { xs: '90%', md: '80%' }, width: '100%' }}>
+                <Box sx={{ maxWidth: { xs: '85%', md: '80%' }, width: '100%' }}>
                   <GraphViewer figure={graphFigure} />
                   <InteractiveChart figure={graphFigure} />
                 </Box>
