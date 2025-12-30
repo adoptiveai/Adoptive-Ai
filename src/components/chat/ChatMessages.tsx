@@ -16,6 +16,8 @@ import dynamic from 'next/dynamic';
 import { SqlResultsTable } from './SqlResultsTable';
 import { ThinkingIndicator } from './ThinkingIndicator';
 import { ThinkingProcess } from './ThinkingProcess';
+import { useAuthStore } from '@/store/authStore';
+import { useChatStore } from '@/store/chatStore';
 // Dynamically import GraphViewer to avoid SSR issues with Plotly
 const GraphViewer = dynamic(() => import('./GraphViewer').then((mod) => mod.GraphViewer), {
   ssr: false,
@@ -30,7 +32,6 @@ import { FeedbackWidget } from './FeedbackWidget';
 import { dt } from '@/config/displayTexts';
 import { Button } from '@mui/material';
 import { Typewriter } from './Typewriter';
-import { useAuthStore } from '@/store/authStore';
 
 interface ChatMessagesProps {
   messages: ChatMessage[];
@@ -55,11 +56,19 @@ type GraphFigure = GraphViewerProps['figure'];
 export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessagesProps) {
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const user = useAuthStore((state) => state.user);
+  const isStreaming = useChatStore((state) => state.isStreaming);
   const canViewDocuments = user?.can_view_documents !== false; // Default true if not set
 
+  const lastConversationId = useRef<string | null>(null);
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    const isNewConversation = conversationId !== lastConversationId.current;
+    lastConversationId.current = conversationId ?? null;
+
+    bottomRef.current?.scrollIntoView({
+      behavior: isNewConversation ? 'auto' : 'smooth',
+    });
+  }, [messages, conversationId]);
 
   const renderJsonEntry = (entry: unknown, index: number) => {
     if (!entry || typeof entry !== 'object') {
@@ -501,7 +510,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
             <Paper elevation={1} sx={{ px: 2.5, py: 2, borderRadius: 3, maxWidth: { xs: '85%', md: '70%' } }}>
               <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
                 {message.content ? (
-                  isLastMessage && message.type === 'ai' ? (
+                  isLastMessage && message.type === 'ai' && isStreaming ? (
                     <Typewriter content={message.content} speed={5} />
                   ) : (
                     message.content
