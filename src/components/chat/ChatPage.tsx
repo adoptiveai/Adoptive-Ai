@@ -12,12 +12,15 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Tooltip,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import { ConversationSidebar } from './ConversationSidebar';
+import { RightSidebar } from './RightSidebar';
 import { ChatMessages } from './ChatMessages';
 import { ChatComposer } from './ChatComposer';
 import { ExamplePrompts } from './ExamplePrompts';
@@ -40,6 +43,8 @@ export function ChatPage() {
   const nextThreadId = searchParams?.get('thread');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(320);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
+  const [rightSidebarWidth, setRightSidebarWidth] = useState(320); // Default width for right sidebar
   const [inputValue, setInputValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [, startTransition] = useTransition();
@@ -98,6 +103,7 @@ export function ChatPage() {
     // Only auto-open on desktop if it wasn't explicitly interacted with (simple logic for now)
     if (!isMobile) {
       setIsSidebarOpen(true);
+      setIsRightSidebarOpen(true);
     }
   }, [isMobile]);
 
@@ -485,7 +491,6 @@ export function ChatPage() {
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
         width={sidebarWidth}
         onWidthChange={setSidebarWidth}
-        onAttachFile={attachFile}
       />
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: 'background.default', minWidth: 0 }}>
         <Box sx={{
@@ -513,6 +518,15 @@ export function ChatPage() {
           </Box>
           <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center', gap: 1 }}>
             <ThemeToggle />
+            <Tooltip title="My Documents">
+              <IconButton
+                onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
+                color={isRightSidebarOpen ? 'primary' : 'default'}
+                size="small"
+              >
+                <FolderOpenIcon />
+              </IconButton>
+            </Tooltip>
             <ModelSelector disabled={isSubmitting} />
           </Box>
         </Box>
@@ -561,6 +575,14 @@ export function ChatPage() {
           userId={userId}
         />
       </Box>
+      <RightSidebar
+        isOpen={isRightSidebarOpen}
+        onClose={() => setIsRightSidebarOpen(false)}
+        width={rightSidebarWidth}
+        onWidthChange={setRightSidebarWidth}
+        currentThreadId={currentThreadId}
+        onAttachFile={attachFile}
+      />
     </Box>
   );
 }

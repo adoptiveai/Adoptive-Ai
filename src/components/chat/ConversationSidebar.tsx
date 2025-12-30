@@ -14,11 +14,14 @@ import {
   Stack,
   TextField,
   Tooltip,
-  Typography,
+  Drawer,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  useTheme,
+  useMediaQuery,
+  Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -33,15 +36,7 @@ import type { Conversation } from '@/types/api';
 import { dt } from '@/config/displayTexts';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 
-import Image from 'next/image';
 import { useEffect } from 'react';
-import { agentClient } from '@/services/agentClient';
-import type { UploadedFile } from '@/types/api';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { Accordion, AccordionSummary, AccordionDetails, Paper, IconButton as MuiIconButton, useTheme, useMediaQuery, Drawer } from '@mui/material';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
 interface ConversationSidebarProps {
@@ -57,7 +52,6 @@ interface ConversationSidebarProps {
   onToggle: () => void;
   width: number;
   onWidthChange: (width: number) => void;
-  onAttachFile: (file: UploadedFile) => void;
 }
 
 export function ConversationSidebar({
@@ -73,7 +67,6 @@ export function ConversationSidebar({
   onToggle,
   width,
   onWidthChange,
-  onAttachFile,
 }: ConversationSidebarProps) {
   const router = useRouter();
   const { logout } = useAuthStore();
@@ -118,6 +111,7 @@ export function ConversationSidebar({
     await onDelete(deleteConfirm);
     setDeleteConfirm(null);
   };
+
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -297,16 +291,6 @@ export function ConversationSidebar({
         </DialogActions>
       </Dialog>
 
-      <Divider />
-
-      <Box sx={{ p: 2 }}>
-        <MyDocumentsSection
-          currentThreadId={currentThreadId}
-          onAttach={onAttachFile}
-        />
-      </Box>
-
-      <Divider />
 
       <Box sx={{ p: 2 }}>
         <Stack spacing={1}>
@@ -369,139 +353,6 @@ export function ConversationSidebar({
       }}
     >
       {SidebarContent}
-    </Box>
-  );
-}
-
-function MyDocumentsSection({ currentThreadId, onAttach }: { currentThreadId: string | null, onAttach: (file: UploadedFile) => void }) {
-  const [files, setFiles] = useState<UploadedFile[]>([]);
-  const [loading, setLoading] = useState(false);
-  // TODO: Get actual user ID from context/auth
-  const userId = "00000000-0000-0000-0000-000000000001";
-
-  useEffect(() => {
-    const fetchFiles = async () => {
-      setLoading(true);
-      try {
-        const fetchedFiles = await agentClient.getFiles(userId);
-        setFiles(fetchedFiles);
-      } catch (error) {
-        console.error("Failed to fetch files:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFiles();
-  }, [userId]);
-
-  const handleAttach = (file: UploadedFile) => {
-    onAttach(file);
-    toast.success('File attached to chat');
-  };
-
-  if (files.length === 0) return null;
-
-  return (
-    <Box>
-      <Typography variant="subtitle2" sx={{ mb: 1, px: 1, fontWeight: 600, color: 'text.primary' }}>
-        My Documents
-      </Typography>
-      <Accordion
-        disableGutters
-        elevation={0}
-        defaultExpanded
-        sx={{
-          '&:before': { display: 'none' },
-          bgcolor: 'transparent'
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          sx={{
-            minHeight: 40,
-            px: 1,
-            '& .MuiAccordionSummary-content': { margin: '8px 0' }
-          }}
-        >
-          <Typography variant="body2" color="text.secondary">
-            {files.length} uploaded file{files.length !== 1 ? 's' : ''}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ p: 0 }}>
-          <Box sx={{ maxHeight: 300, overflowY: 'auto', px: 1, pb: 2 }}>
-            <Stack spacing={1}>
-              {files.map((file) => (
-                <Paper
-                  key={file.id}
-                  elevation={0}
-                  sx={{
-                    p: 1.5,
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    borderRadius: 2,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1.5,
-                    transition: 'all 0.2s',
-                    '&:hover': {
-                      borderColor: 'primary.main',
-                      bgcolor: 'action.hover',
-                      transform: 'translateY(-1px)',
-                      boxShadow: 1
-                    }
-                  }}
-                >
-                  <Box
-                    sx={{
-                      p: 1,
-                      borderRadius: 1.5,
-                      bgcolor: 'primary.light',
-                      color: 'primary.main',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <InsertDriveFileIcon fontSize="small" />
-                  </Box>
-
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography variant="body2" noWrap fontWeight={500}>
-                      {file.filename}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                      {file.file_size ? `${(file.file_size / 1024).toFixed(1)} KB` : 'Document'}
-                    </Typography>
-                  </Box>
-
-                  <Tooltip title="Attach to conversation">
-                    <span>
-                      <MuiIconButton
-                        size="small"
-                        onClick={() => handleAttach(file)}
-                        disabled={!currentThreadId}
-                        color="primary"
-                        sx={{
-                          bgcolor: 'background.paper',
-                          border: '1px solid',
-                          borderColor: 'divider',
-                          '&:hover': {
-                            bgcolor: 'primary.main',
-                            color: 'primary.contrastText',
-                            borderColor: 'primary.main'
-                          }
-                        }}
-                      >
-                        <AttachFileIcon fontSize="small" />
-                      </MuiIconButton>
-                    </span>
-                  </Tooltip>
-                </Paper>
-              ))}
-            </Stack>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
     </Box>
   );
 }
