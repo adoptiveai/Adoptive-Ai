@@ -107,12 +107,12 @@ export function LoginForm() {
               {isLoading ? <CircularProgress size={20} color="inherit" /> : (dt.LOGIN_BUTTON || 'Login')}
             </Button>
 
-            <Typography variant="body2" textAlign="center">
+            {/* <Typography variant="body2" textAlign="center">
               Don&apos;t have an account?{' '}
               <Link component="button" onClick={() => router.push('/register')} underline="hover">
                 Register here
               </Link>
-            </Typography>
+            </Typography> */}
 
           </Stack>
         </CardContent>
