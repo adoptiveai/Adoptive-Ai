@@ -328,7 +328,11 @@ export function ConversationSidebar({
         onClose={onToggle}
         ModalProps={{ keepMounted: true }}
         sx={{
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 300 },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: '85vw',
+            maxWidth: 360
+          },
         }}
       >
         {SidebarContent}

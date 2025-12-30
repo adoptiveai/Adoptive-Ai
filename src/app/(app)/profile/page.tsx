@@ -110,157 +110,117 @@ export default function ProfilePage() {
                 display: 'flex',
                 justifyContent: 'center',
                 transform: 'translateY(-50%)',
-                mb: { xs: -4, md: -6 },
+                mb: { xs: -4, md: -5 },
               }}
             >
               <Avatar
                 sx={{
-                  width: 128,
-                  height: 128,
-                  fontSize: '3rem',
+                  width: 140,
+                  height: 140,
+                  fontSize: '3.5rem',
                   bgcolor: 'background.paper',
                   color: 'primary.main',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                  border: '4px solid',
+                  boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
+                  border: '6px solid',
                   borderColor: 'background.paper',
                 }}
               >
-                {user?.email ? getInitials(user.email) : <PersonIcon sx={{ fontSize: 64 }} />}
+                {user?.email ? getInitials(user.email) : <PersonIcon sx={{ fontSize: 72 }} />}
               </Avatar>
             </Box>
 
-            {/* User Intro */}
-            <Box sx={{ textAlign: 'center', mt: 8, mb: 6 }}>
-              <Typography variant="h4" fontWeight={800} color="text.primary" gutterBottom>
+            {/* User Intro & Details */}
+            <Box sx={{ textAlign: 'center', mt: 8, maxWidth: 480, mx: 'auto' }}>
+              <Typography variant="h4" fontWeight={800} color="text.primary" gutterBottom sx={{ mb: 1 }}>
                 {user?.username || 'User Profile'}
               </Typography>
-              <Chip
-                label={user?.email || 'No Email'}
-                variant="outlined"
-                size="small"
-                sx={{
-                  borderRadius: 2,
-                  bgcolor: alpha(theme.palette.primary.main, 0.05),
-                  borderColor: alpha(theme.palette.primary.main, 0.2),
-                  color: 'primary.main',
-                  fontWeight: 500
-                }}
-              />
-            </Box>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+                Manage your account settings and preferences
+              </Typography>
 
-            <Divider sx={{ mb: 6 }} />
-
-            <Grid container spacing={4}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Typography variant="overline" color="text.secondary" fontWeight={700} sx={{ letterSpacing: 1.5, mb: 2, display: 'block' }}>
-                  ACCOUNT DETAILS
-                </Typography>
-
-                <Stack spacing={2}>
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 2,
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: 3,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 2,
-                    }}
-                  >
-                    <Avatar sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main' }}>
-                      <PersonIcon />
-                    </Avatar>
-                    <Box sx={{ flex: 1 }}>
-                      <Typography variant="caption" color="text.secondary">Username</Typography>
-                      <Typography variant="body1" fontWeight={600}>{user?.username || 'Not set'}</Typography>
-                    </Box>
-                  </Paper>
-
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 2,
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: 3,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 2,
-                    }}
-                  >
-                    <Avatar sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main' }}>
-                      <EmailIcon />
-                    </Avatar>
-                    <Box sx={{ flex: 1 }}>
-                      <Typography variant="caption" color="text.secondary">Email</Typography>
-                      <Typography variant="body1" fontWeight={600}>{user?.email || 'Not available'}</Typography>
-                    </Box>
-                  </Paper>
-                </Stack>
-              </Grid>
-
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Typography variant="overline" color="text.secondary" fontWeight={700} sx={{ letterSpacing: 1.5, mb: 2, display: 'block' }}>
-                  SECURITY
-                </Typography>
-
-                <Stack spacing={2}>
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 2,
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: 3,
-                      bgcolor: 'background.paper',
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                      <Avatar sx={{ bgcolor: 'grey.200', color: 'text.secondary' }}>
-                        <BadgeIcon />
-                      </Avatar>
-                      <Box>
-                        <Typography variant="caption" color="text.secondary">User ID</Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Typography variant="body2" fontFamily="monospace" fontWeight={500}>
-                            {user?.id?.slice(0, 18)}...
-                          </Typography>
-                          <Tooltip title="Copy ID">
-                            <IconButton size="small" onClick={() => copyToClipboard(user?.id || '', 'User ID')}>
-                              <ContentCopyIcon fontSize="inherit" />
-                            </IconButton>
-                          </Tooltip>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Paper>
-
-                  <Box sx={{ pt: 2 }}>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      startIcon={<LogoutIcon />}
-                      onClick={handleLogout}
-                      fullWidth
-                      size="large"
-                      sx={{
-                        borderRadius: 3,
-                        py: 1.5,
-                        textTransform: 'none',
-                        fontWeight: 600,
-                        borderWidth: 2,
-                        '&:hover': { borderWidth: 2, bgcolor: 'error.main', color: 'white' }
-                      }}
-                    >
-                      {dt.LOGOUT || 'Sign Out'}
-                    </Button>
+              <Stack spacing={3} sx={{ mb: 6 }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 2.5,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: 4,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2.5,
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      borderColor: 'primary.main',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  <Avatar sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', width: 48, height: 48 }}>
+                    <PersonIcon />
+                  </Avatar>
+                  <Box sx={{ flex: 1, textAlign: 'left' }}>
+                    <Typography variant="caption" color="text.secondary" fontWeight={500} textTransform="uppercase" letterSpacing={1}>
+                      Username
+                    </Typography>
+                    <Typography variant="h6" fontWeight={600} sx={{ fontSize: '1.1rem' }}>
+                      {user?.username || 'Not set'}
+                    </Typography>
                   </Box>
-                </Stack>
-              </Grid>
-            </Grid>
+                </Paper>
 
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 2.5,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: 4,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2.5,
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      borderColor: 'primary.main',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  <Avatar sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', width: 48, height: 48 }}>
+                    <EmailIcon />
+                  </Avatar>
+                  <Box sx={{ flex: 1, textAlign: 'left' }}>
+                    <Typography variant="caption" color="text.secondary" fontWeight={500} textTransform="uppercase" letterSpacing={1}>
+                      Email Address
+                    </Typography>
+                    <Typography variant="h6" fontWeight={600} sx={{ fontSize: '1.1rem' }}>
+                      {user?.email || 'Not available'}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Stack>
+
+              <Button
+                variant="outlined"
+                color="error"
+                startIcon={<LogoutIcon />}
+                onClick={handleLogout}
+                size="large"
+                sx={{
+                  borderRadius: 3,
+                  px: 4,
+                  py: 1.5,
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  borderWidth: 1.5,
+                  '&:hover': { borderWidth: 1.5, bgcolor: 'error.main', color: 'white' }
+                }}
+              >
+                {dt.LOGOUT || 'Sign Out'}
+              </Button>
+            </Box>
           </CardContent>
         </Card>
       </Container>
