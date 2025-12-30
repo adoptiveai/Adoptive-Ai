@@ -17,7 +17,7 @@ import {
 } from 'chart.js';
 import { Bar, Line, Scatter, Pie } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Box, Paper, Typography, Stack, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Box, Paper, Typography, Stack, FormControl, InputLabel, Select, MenuItem, useTheme } from '@mui/material';
 import { useMemo, useState } from 'react';
 import type { GraphViewerProps } from './GraphViewer';
 
@@ -204,21 +204,37 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
         };
     }, [plotlyData, chartType]);
 
+    const theme = useTheme();
+
     const options = useMemo<ChartOptions<'bar' | 'line' | 'scatter' | 'pie'>>(() => {
+        const textColor = theme.palette.text.primary;
+        const gridColor = theme.palette.divider;
+        const tooltipBg = theme.palette.background.paper;
+        const tooltipText = theme.palette.text.primary;
+
         return {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
                     position: 'top' as const,
+                    labels: {
+                        color: textColor,
+                    }
                 },
                 title: {
                     display: !!title || !!layout?.title,
                     text: title || (typeof layout?.title === 'string' ? layout.title : layout?.title?.text) || '',
+                    color: textColor,
                 },
                 tooltip: {
                     mode: 'index',
                     intersect: false,
+                    backgroundColor: tooltipBg,
+                    titleColor: tooltipText,
+                    bodyColor: tooltipText,
+                    borderColor: gridColor,
+                    borderWidth: 1,
                 },
                 datalabels: {
                     display: chartType === 'pie',
@@ -241,19 +257,33 @@ export function InteractiveChart({ figure, title }: GraphViewerProps) {
                     title: {
                         display: !!layout?.yaxis?.title,
                         text: (typeof layout?.yaxis?.title === 'string' ? layout.yaxis.title : layout?.yaxis?.title?.text) || '',
+                        color: textColor,
                     },
                     display: chartType !== 'pie', // Hide Y axis for pie chart
+                    grid: {
+                        color: gridColor,
+                    },
+                    ticks: {
+                        color: textColor,
+                    }
                 },
                 x: {
                     title: {
                         display: !!layout?.xaxis?.title,
                         text: (typeof layout?.xaxis?.title === 'string' ? layout.xaxis.title : layout?.xaxis?.title?.text) || '',
+                        color: textColor,
                     },
                     display: chartType !== 'pie', // Hide X axis for pie chart
+                    grid: {
+                        color: gridColor,
+                    },
+                    ticks: {
+                        color: textColor,
+                    }
                 }
             },
         };
-    }, [title, layout, chartType]);
+    }, [title, layout, chartType, theme]);
 
     const renderChart = () => {
         switch (chartType) {

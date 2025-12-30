@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Plotly, { Data, Layout, Config } from 'plotly.js-dist-min';
-import { Box, Paper, FormControl, InputLabel, Select, MenuItem, Stack } from '@mui/material';
+import { Box, Paper, FormControl, InputLabel, Select, MenuItem, Stack, useTheme } from '@mui/material';
 
 export interface GraphViewerProps {
   figure: {
@@ -16,6 +16,7 @@ export interface GraphViewerProps {
 export function GraphViewer({ figure, title }: GraphViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [chartType, setChartType] = useState<string>('bar');
+  const theme = useTheme();
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -64,12 +65,36 @@ export function GraphViewer({ figure, title }: GraphViewerProps) {
     // Exclude width and height to allow autosize to work
     const { width, height, ...restLayout } = figure.layout || {};
 
+    // Theme-aware colors
+    const textColor = theme.palette.text.primary;
+    const axisColor = theme.palette.text.secondary;
+    const gridColor = theme.palette.divider;
+
     const defaultLayout: Partial<Layout> = {
       autosize: true,
       margin: { l: 50, r: 50, t: 50, b: 50 },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
-      font: { family: 'Arial, sans-serif', size: 12 },
+      font: {
+        family: 'Inter, Roboto, sans-serif',
+        size: 12,
+        color: textColor
+      },
+      xaxis: {
+        color: axisColor,
+        gridcolor: gridColor,
+        zerolinecolor: gridColor,
+      },
+      yaxis: {
+        color: axisColor,
+        gridcolor: gridColor,
+        zerolinecolor: gridColor,
+      },
+      legend: {
+        font: {
+          color: textColor,
+        }
+      },
       ...restLayout,
     };
 
@@ -89,7 +114,7 @@ export function GraphViewer({ figure, title }: GraphViewerProps) {
     return () => {
       Plotly.purge(node);
     };
-  }, [figure, chartType]);
+  }, [figure, chartType, theme]);
 
   return (
     <Paper elevation={2} sx={{ p: 2, borderRadius: 2, width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
