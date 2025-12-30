@@ -39,104 +39,97 @@ export function ThinkingProcess({ messages, renderToolDetails, isOpen = false }:
     const theme = useTheme();
     const [expanded, setExpanded] = useState(isOpen);
 
-    const isRunning = messages.some(m => !m.content && !m.custom_data); // Heuristic for running, though usually we have content.
-    // Actually, in this system, 'tool' messages usually have content when done.
-    // If we want to show "Thinking...", it's usually when we are waiting or have a list of tools.
-
     return (
-        <Box sx={{ width: '100%', my: 1 }}>
-            <Accordion
-                expanded={expanded}
-                onChange={(_, isExpanded) => setExpanded(isExpanded)}
+        <Box sx={{ width: '100%', mb: 1 }}>
+            <Box
+                onClick={() => setExpanded(!expanded)}
+                component="button"
                 sx={{
-                    boxShadow: 'none',
-                    backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                    borderRadius: 2,
-                    '&:before': { display: 'none' },
-                    border: '1px solid',
-                    borderColor: alpha(theme.palette.primary.main, 0.1),
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    px: 2,
+                    py: 1,
+                    borderRadius: 4, // 16px pill shape
+                    border: 'none',
+                    bgcolor: expanded ? alpha(theme.palette.primary.main, 0.1) : alpha(theme.palette.primary.main, 0.05),
+                    color: theme.palette.primary.main,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                        bgcolor: alpha(theme.palette.primary.main, 0.12),
+                    }
                 }}
             >
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon sx={{ color: theme.palette.primary.main }} />}
+                <Typography
+                    variant="body2"
                     sx={{
-                        minHeight: 48,
-                        '& .MuiAccordionSummary-content': {
-                            my: 1,
-                            alignItems: 'center',
-                            gap: 1.5,
-                        },
+                        fontWeight: 600,
+                        fontFamily: 'Google Sans, Inter, sans-serif',
                     }}
                 >
-                    {/* <AutoAwesomeIcon
-                        sx={{
-                            fontSize: 20,
-                            color: theme.palette.primary.main,
-                            animation: `${pulse} 2s infinite ease-in-out`,
-                        }}
-                    /> */}
-                    <Typography
-                        variant="body2"
-                        sx={{
-                            fontWeight: 600,
-                            color: theme.palette.primary.main,
-                            fontFamily: 'Google Sans, Inter, sans-serif',
-                        }}
-                    >
-                        Thinking Process
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                        {messages.length} step{messages.length !== 1 ? 's' : ''}
-                    </Typography>
-                </AccordionSummary>
-                <AccordionDetails sx={{ pt: 0, pb: 2, px: 2 }}>
-                    <Stack spacing={2} sx={{ mt: 1 }}>
-                        {messages.map((msg, idx) => {
-                            const toolName = (msg.custom_data?.call as any)?.name || msg.custom_data?.tool || 'Tool';
-                            const isLast = idx === messages.length - 1;
+                    Thinking Process
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                    {messages.length} step{messages.length !== 1 ? 's' : ''}
+                </Typography>
+                <ExpandMoreIcon
+                    sx={{
+                        fontSize: 20,
+                        ml: 0.5,
+                        transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                        transition: 'transform 0.2s'
+                    }}
+                />
+            </Box>
 
-                            return (
-                                <Box key={idx} sx={{ position: 'relative', pl: 2 }}>
-                                    {/* Timeline line */}
-                                    {!isLast && (
-                                        <Box
-                                            sx={{
-                                                position: 'absolute',
-                                                left: 3,
-                                                top: 24,
-                                                bottom: -16,
-                                                width: 2,
-                                                bgcolor: 'divider',
-                                            }}
-                                        />
-                                    )}
+            {expanded && (
+                <Stack spacing={2} sx={{ mt: 2, px: 1 }}>
+                    {messages.map((msg, idx) => {
+                        const toolName = (msg.custom_data?.call as any)?.name || msg.custom_data?.tool || 'Tool';
+                        const isLast = idx === messages.length - 1;
 
-                                    <Stack direction="row" spacing={1.5} alignItems="flex-start">
-                                        <CheckCircleIcon
-                                            sx={{
-                                                fontSize: 16,
-                                                color: theme.palette.success.main,
-                                                mt: 0.5,
-                                                zIndex: 1,
-                                                bgcolor: 'background.paper',
-                                                borderRadius: '50%',
-                                            }}
-                                        />
-                                        <Box sx={{ flex: 1, minWidth: 0 }}>
-                                            <Typography variant="subtitle2" sx={{ fontSize: '0.85rem', fontWeight: 600 }}>
-                                                Used {toolName}
-                                            </Typography>
-                                            <Box sx={{ mt: 0.5, color: 'text.secondary', fontSize: '0.85rem' }}>
-                                                {renderToolDetails(msg)}
-                                            </Box>
+                        return (
+                            <Box key={idx} sx={{ position: 'relative', pl: 2 }}>
+                                {/* Timeline line */}
+                                {!isLast && (
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            left: 9, // Centered with icon (16px icon + 2px padding -> center ~9)
+                                            top: 24,
+                                            bottom: -16,
+                                            width: 2,
+                                            bgcolor: 'divider',
+                                        }}
+                                    />
+                                )}
+
+                                <Stack direction="row" spacing={2} alignItems="flex-start">
+                                    <CheckCircleIcon
+                                        sx={{
+                                            fontSize: 18,
+                                            color: theme.palette.success.main,
+                                            mt: 0.25,
+                                            zIndex: 1,
+                                            bgcolor: 'background.paper',
+                                            borderRadius: '50%',
+                                        }}
+                                    />
+                                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                                        <Typography variant="subtitle2" sx={{ fontSize: '0.9rem', fontWeight: 600, mb: 0.5 }}>
+                                            Used {toolName}
+                                        </Typography>
+                                        <Box sx={{ color: 'text.secondary', fontSize: '0.85rem' }}>
+                                            {renderToolDetails(msg)}
                                         </Box>
-                                    </Stack>
-                                </Box>
-                            );
-                        })}
-                    </Stack>
-                </AccordionDetails>
-            </Accordion>
+                                    </Box>
+                                </Stack>
+                            </Box>
+                        );
+                    })}
+                </Stack>
+            )}
         </Box>
     );
 }

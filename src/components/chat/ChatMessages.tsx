@@ -383,13 +383,15 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
                   </Stack>
                 ) : null}
                 <Paper
-                  elevation={3}
+                  elevation={0}
                   sx={{
-                    px: 2.5,
+                    px: 3,
                     py: 1.5,
                     backgroundColor: 'primary.main',
                     color: 'primary.contrastText',
-                    borderRadius: 3,
+                    borderRadius: '24px', // Bubbly shape
+                    borderTopRightRadius: '4px', // Distinct user styling
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)', // Soft shadow
                   }}
                 >
                   <Typography variant="body1">{message.content}</Typography>
@@ -507,7 +509,20 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
         return (
           <Stack key={index} direction="row" spacing={2} alignItems="flex-start">
             <Avatar sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>{aiIcon}</Avatar>
-            <Paper elevation={1} sx={{ px: 2.5, py: 2, borderRadius: 3, maxWidth: { xs: '85%', md: '70%' } }}>
+            <Paper
+              elevation={0}
+              sx={{
+                px: 3,
+                py: 2.5,
+                borderRadius: '24px',
+                borderTopLeftRadius: '4px', // Distinct AI styling
+                maxWidth: { xs: '85%', md: '70%' },
+                bgcolor: 'background.paper', // Ensure it stands out if on gray bg
+                border: '1px solid',
+                borderColor: 'divider',
+                mt: 1.5, // Increased adjustment for alignment
+              }}
+            >
               <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
                 {message.content ? (
                   isLastMessage && message.type === 'ai' && isStreaming ? (
