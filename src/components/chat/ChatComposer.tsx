@@ -82,22 +82,39 @@ export function ChatComposer({
       {/* Suggested Prompts */}
       <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 1, '::-webkit-scrollbar': { display: 'none' } }}>
         {suggestedPrompts.map((prompt) => (
-          <Chip
+          <Box
             key={prompt.label}
-            label={prompt.label}
             onClick={() => onQuickSubmit?.(prompt.message)}
+            component="button"
             disabled={disabled}
-            variant="outlined"
-            clickable
             sx={{
-              borderRadius: 2,
-              bgcolor: 'background.paper',
-              borderColor: 'divider',
+              border: 'none',
+              outline: 'none',
+              cursor: disabled ? 'default' : 'pointer',
+              bgcolor: 'action.hover', // Subtle background
+              color: 'text.primary',
+              py: 0.75,
+              px: 2,
+              borderRadius: 4, // Pill shape
+              fontSize: '0.85rem',
+              fontWeight: 500,
+              transition: 'all 0.2s ease-in-out',
+              whiteSpace: 'nowrap',
               '&:hover': {
-                bgcolor: 'action.hover',
+                bgcolor: 'action.selected',
+                transform: 'translateY(-1px)',
+              },
+              '&:active': {
+                transform: 'translateY(0)',
+              },
+              '&:disabled': {
+                opacity: 0.5,
+                cursor: 'not-allowed',
               }
             }}
-          />
+          >
+            {prompt.label}
+          </Box>
         ))}
       </Box>
 
