@@ -488,17 +488,26 @@ export function ChatPage() {
         onAttachFile={attachFile}
       />
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: 'background.default', minWidth: 0 }}>
-        <Box sx={{ px: { xs: 2, md: 3 }, py: { xs: 1.5, md: 2 }, borderBottom: '1px solid', borderColor: 'divider', backgroundColor: 'background.paper', display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{
+          px: { xs: 1.5, md: 3 },
+          py: { xs: 1.5, md: 2 },
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          backgroundColor: 'background.paper',
+          display: 'flex',
+          alignItems: 'center',
+          gap: { xs: 1, md: 2 }
+        }}>
           {!isSidebarOpen && (
             <IconButton onClick={() => setIsSidebarOpen(true)} edge="start" size="small">
               <MenuIcon />
             </IconButton>
           )}
-          <Box>
-            <Typography variant="h6" fontWeight={600}>
+          <Box sx={{ minWidth: 0, flex: 1 }}>
+            <Typography variant="h6" fontWeight={600} noWrap sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
               {conversationTitle || dt.DEFAULT_CONVERSATION_TITLE}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" noWrap sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' }, display: { xs: 'none', sm: 'block' } }}>
               {dt.CAPTION || 'AdoptiveAI - AI Research Assistant'}
             </Typography>
           </Box>

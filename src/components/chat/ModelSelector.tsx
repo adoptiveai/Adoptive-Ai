@@ -32,7 +32,7 @@ export function ModelSelector({ disabled }: ModelSelectorProps) {
     };
 
     return (
-        <FormControl size="small" sx={{ minWidth: 140 }}>
+        <FormControl size="small" sx={{ minWidth: { xs: 100, md: 140 } }}>
             <InputLabel id="model-selector-label">Model</InputLabel>
             <Select
                 labelId="model-selector-label"
