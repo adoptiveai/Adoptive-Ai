@@ -100,10 +100,9 @@ export function ChatPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
-    // Only auto-open on desktop if it wasn't explicitly interacted with (simple logic for now)
+    // Only auto-open left sidebar on desktop
     if (!isMobile) {
       setIsSidebarOpen(true);
-      setIsRightSidebarOpen(true);
     }
   }, [isMobile]);
 
