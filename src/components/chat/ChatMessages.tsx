@@ -352,7 +352,7 @@ export function ChatMessages({ messages, onOpenPdf, conversationId }: ChatMessag
   }
 
   return (
-    <Stack spacing={2} sx={{ flex: 1, overflowY: 'auto', px: { xs: 3, md: 3 }, py: { xs: 2, md: 4 } }}>
+    <Stack spacing={2} sx={{ width: '100%', maxWidth: '950px', mx: 'auto', px: { xs: 3, md: 3 }, py: { xs: 2, md: 4 } }}>
       {groupedMessages.map((groupOrMessage, index) => {
         if (Array.isArray(groupOrMessage)) {
           // It's a group of tool messages

@@ -12,7 +12,7 @@ export function ExamplePrompts({ onSelect }: ExamplePromptsProps) {
   if (!prompts.length) return null;
 
   return (
-    <Box sx={{ mb: 6, px: { xs: 1, sm: 2 }, maxWidth: 'lg', mx: 'auto' }}>
+    <Box sx={{ mb: 6, px: { xs: 1, sm: 2 }, maxWidth: '950px', mx: 'auto' }}>
       <Typography
         variant="h5"
         gutterBottom
