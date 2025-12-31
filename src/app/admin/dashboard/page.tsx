@@ -10,8 +10,9 @@ const API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL || 'http://localhost:8000
 
 interface DjangoUser {
     id: number;
+    uuid: string; // Add UUID field
     email: string;
-    username: string; // Ensure username is included in the type
+    username: string;
     role: {
         id: number;
         name: string;
@@ -76,14 +77,19 @@ export default function AdminDashboardPage() {
             const users: DjangoUser[] = await res.json();
 
             // 3. Filter for Guest Users
-            const guestUsernames = users
-                .filter(u => {
-                    console.log(`DEBUG: Checking user ${u.username}`, u.role);
-                    return u.role?.name === 'guest';
-                })
-                .map(u => u.username);
+            // Construct users_info with UUIDs if available
+            const usersInfo = users
+                .filter(u => u.role?.name === 'guest')
+                .map(u => ({
+                    username: u.username,
+                    user_id: u.uuid || u.id?.toString() // Use typed uuid, fallback to id
+                }));
 
-            console.log("DEBUG: Filtered Guest Usernames:", guestUsernames);
+            console.log("DEBUG: Sending users_info to backend:", usersInfo);
+
+            // The agentClient.getUsageStats currently expects an array of usernames (string[]).
+            // We extract usernames from the newly created usersInfo for compatibility.
+            const guestUsernames = usersInfo.map(u => u.username);
 
             // 4. Fetch Usage Stats from Backend
             if (guestUsernames.length > 0) {
