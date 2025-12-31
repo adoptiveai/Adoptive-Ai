@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
 
             // 4. Fetch Usage Stats from Backend
             if (guestUsernames.length > 0) {
-                const usageStats = await agentClient.getUsageStats(guestUsernames);
+                const usageStats = await agentClient.getUsageStats(guestUsernames, usersInfo);
                 setStats(usageStats);
             } else {
                 setStats({
