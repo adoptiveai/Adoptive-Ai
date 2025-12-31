@@ -74,7 +74,6 @@ export default function AdminDashboardPage() {
             }
 
             const users: DjangoUser[] = await res.json();
-            console.log("DEBUG: All Users Fetched:", users);
 
             // 3. Filter for Guest Users
             const guestUsernames = users

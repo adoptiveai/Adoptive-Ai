@@ -373,10 +373,11 @@ export class AgentClient {
     }
   }
 
-  async getUsageStats(usernames: string[]): Promise<UsageStatsResponse> {
+  async getUsageStats(usernames: string[], users_info?: { username: string, user_id: string }[]): Promise<UsageStatsResponse> {
     try {
       const { data } = await this.client.post<UsageStatsResponse>('/admin/usage-stats', {
         usernames: usernames,
+        users_info: users_info || []
       });
       return data;
     } catch (error) {
