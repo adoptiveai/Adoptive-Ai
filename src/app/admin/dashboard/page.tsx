@@ -74,11 +74,17 @@ export default function AdminDashboardPage() {
             }
 
             const users: DjangoUser[] = await res.json();
+            console.log("DEBUG: All Users Fetched:", users);
 
             // 3. Filter for Guest Users
             const guestUsernames = users
-                .filter(u => u.role?.name === 'guest')
+                .filter(u => {
+                    console.log(`DEBUG: Checking user ${u.username}`, u.role);
+                    return u.role?.name === 'guest';
+                })
                 .map(u => u.username);
+
+            console.log("DEBUG: Filtered Guest Usernames:", guestUsernames);
 
             // 4. Fetch Usage Stats from Backend
             if (guestUsernames.length > 0) {
