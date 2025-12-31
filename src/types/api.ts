@@ -144,3 +144,17 @@ export interface UploadedFile {
   file_size?: number;
   content_type?: string;
 }
+
+export interface UserUsageStats {
+  username: string;
+  total_messages: number;
+  estimated_tokens: number;
+  conversation_count: number;
+}
+
+export interface UsageStatsResponse {
+  total_guest_users: number;
+  total_tokens: number;
+  total_messages: number;
+  user_stats: UserUsageStats[];
+}

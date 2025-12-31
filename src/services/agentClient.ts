@@ -16,6 +16,7 @@ import type {
   UserFeedbackRead,
   UserInput,
   UploadedFile,
+  UsageStatsResponse,
 } from '@/types/api';
 
 const env = getEnv();
@@ -369,6 +370,17 @@ export class AgentClient {
       });
     } catch (error) {
       throw this.wrapError(error, 'Failed to attach file');
+    }
+  }
+
+  async getUsageStats(usernames: string[]): Promise<UsageStatsResponse> {
+    try {
+      const { data } = await this.client.post<UsageStatsResponse>('/admin/usage-stats', {
+        usernames: usernames,
+      });
+      return data;
+    } catch (error) {
+      throw this.wrapError(error, 'Failed to fetch usage stats');
     }
   }
 
