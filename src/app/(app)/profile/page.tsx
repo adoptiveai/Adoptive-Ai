@@ -26,6 +26,7 @@ import EmailIcon from '@mui/icons-material/EmailOutlined';
 import BadgeIcon from '@mui/icons-material/BadgeOutlined';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackRounded';
 import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useAuthStore } from '@/store/authStore';
 import { dt } from '@/config/displayTexts';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
@@ -201,6 +202,28 @@ export default function ProfilePage() {
                   </Box>
                 </Paper>
               </Stack>
+
+              {(user as any)?.role?.name === 'admin' || (user as any)?.role?.name === 'superuser' ? (
+                <Button
+                  component={Link}
+                  href="/admin/dashboard"
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AdminPanelSettingsIcon />}
+                  size="large"
+                  fullWidth
+                  sx={{
+                    mb: 2,
+                    borderRadius: 3,
+                    py: 1.5,
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  Admin Dashboard
+                </Button>
+              ) : null}
 
               <Button
                 variant="outlined"
