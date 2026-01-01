@@ -155,7 +155,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4">
                     <StatCard
                         title="Total Guest Users"
                         value={stats?.total_guest_users || 0}
@@ -176,6 +176,24 @@ export default function AdminDashboardPage() {
                         value={`$${(stats?.total_cost || 0).toFixed(4)}`}
                         color="bg-orange-500"
                     />
+                </div>
+
+                {/* Pricing Info Note */}
+                <div className="mb-8 flex items-center gap-2 text-sm text-gray-500">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>
+                        Cost calculated using <strong>official API pricing</strong> (input & output tokens priced separately).
+                        <a
+                            href="https://openai.com/api/pricing/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-1 text-blue-600 hover:text-blue-800 underline"
+                        >
+                            View pricing
+                        </a>
+                    </span>
                 </div>
 
                 {/* User Table */}
