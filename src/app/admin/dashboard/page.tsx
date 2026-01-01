@@ -40,10 +40,8 @@ export default function AdminDashboardPage() {
         // 3. Role check - if role is missing or not admin/superuser, redirect
         // Note: The backend also enforces this, but frontend redirect provides better UX.
         const roleName = user.role?.name?.toLowerCase();
-        console.log('DEBUG: Admin dashboard - user role:', user.role, 'roleName:', roleName);
 
         if (roleName !== 'admin' && roleName !== 'superuser') {
-            console.log('DEBUG: Role check failed, redirecting to home');
             router.push('/'); // Redirect non-admins to home
             return;
         }
@@ -87,8 +85,6 @@ export default function AdminDashboardPage() {
                     username: u.username,
                     user_id: u.uuid || u.id?.toString() // Use typed uuid, fallback to id
                 }));
-
-            console.log("DEBUG: Sending users_info to backend:", usersInfo);
 
             // The agentClient.getUsageStats currently expects an array of usernames (string[]).
             // We extract usernames from the newly created usersInfo for compatibility.
