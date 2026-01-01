@@ -21,36 +21,39 @@ interface DjangoUser {
 
 export default function AdminDashboardPage() {
     const router = useRouter();
-    const { user, accessToken, isAuthenticated, isLoading: isAuthLoading } = useAuthStore();
+    const { user, accessToken, isAuthenticated, _hasHydrated } = useAuthStore();
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [stats, setStats] = useState<UsageStatsResponse | null>(null);
 
     useEffect(() => {
-        // 1. Check Auth & Role
-        if (isAuthLoading) return;
+        // 1. Wait for auth store to hydrate from localStorage
+        if (!_hasHydrated) return;
 
+        // 2. Check Auth
         if (!isAuthenticated || !user) {
             router.push('/login');
             return;
         }
 
-        // Role check - assuming role is nested object or string on user object
-        // Based on checked authStore.ts, user object comes from UserReadSerializer response
-        // We need to verify how role is stored in frontend user object.
-        // Assuming user.role.name based on previous context, but let's be safe.
-        // If role is missing or not admin/superuser, redirect.
+        // 3. Role check - if role is missing or not admin/superuser, redirect
         // Note: The backend also enforces this, but frontend redirect provides better UX.
-        const roleName = (user as any).role?.name?.toLowerCase();
+        const roleName = user.role?.name?.toLowerCase();
+        console.log('DEBUG: Admin dashboard - user role:', user.role, 'roleName:', roleName);
 
         if (roleName !== 'admin' && roleName !== 'superuser') {
+            console.log('DEBUG: Role check failed, redirecting to home');
             router.push('/'); // Redirect non-admins to home
             return;
         }
 
         fetchData();
-    }, [user, isAuthenticated, isAuthLoading, router]);
+    }, [user, isAuthenticated, _hasHydrated, router]);
+
+    const handleBackToChat = () => {
+        router.push('/');
+    };
 
     const fetchData = async () => {
         setLoading(true);
@@ -112,7 +115,7 @@ export default function AdminDashboardPage() {
         }
     };
 
-    if (isAuthLoading || loading) {
+    if (!_hasHydrated || loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-50">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -138,7 +141,21 @@ export default function AdminDashboardPage() {
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Guest Usage Dashboard</h1>
+                {/* Header with Back Button */}
+                <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={handleBackToChat}
+                            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-200 rounded-lg transition-all duration-200"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back to Chat
+                        </button>
+                        <h1 className="text-3xl font-bold text-gray-900">Guest Usage Dashboard</h1>
+                    </div>
+                </div>
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

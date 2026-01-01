@@ -10,6 +10,10 @@ export interface AuthUser {
   email: string;
   username?: string;
   can_view_documents?: boolean;  // Whether user has view_doc permission
+  role?: {
+    id: number;
+    name: string;
+  } | null;
 }
 
 interface AuthState {
