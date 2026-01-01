@@ -149,6 +149,7 @@ export interface UserUsageStats {
   username: string;
   total_messages: number;
   estimated_tokens: number;
+  estimated_cost: number;
   conversation_count: number;
 }
 
@@ -156,5 +157,7 @@ export interface UsageStatsResponse {
   total_guest_users: number;
   total_tokens: number;
   total_messages: number;
+  total_cost: number;
   user_stats: UserUsageStats[];
 }
+

@@ -99,6 +99,7 @@ export default function AdminDashboardPage() {
                     total_guest_users: 0,
                     total_tokens: 0,
                     total_messages: 0,
+                    total_cost: 0,
                     user_stats: []
                 });
             }
@@ -154,7 +155,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <StatCard
                         title="Total Guest Users"
                         value={stats?.total_guest_users || 0}
@@ -170,6 +171,11 @@ export default function AdminDashboardPage() {
                         value={stats?.total_tokens.toLocaleString() || 0}
                         color="bg-purple-500"
                     />
+                    <StatCard
+                        title="Total Cost"
+                        value={`$${(stats?.total_cost || 0).toFixed(4)}`}
+                        color="bg-orange-500"
+                    />
                 </div>
 
                 {/* User Table */}
@@ -184,6 +190,7 @@ export default function AdminDashboardPage() {
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Messages Count</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estimated Tokens</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estimated Cost</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conversations</th>
                                 </tr>
                             </thead>
@@ -200,13 +207,16 @@ export default function AdminDashboardPage() {
                                             {user.estimated_tokens.toLocaleString()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            ${user.estimated_cost.toFixed(4)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {user.conversation_count}
                                         </td>
                                     </tr>
                                 ))}
                                 {stats?.user_stats.length === 0 && (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                                        <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
                                             No guest usage data found.
                                         </td>
                                     </tr>
