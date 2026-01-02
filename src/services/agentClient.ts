@@ -385,6 +385,19 @@ export class AgentClient {
     }
   }
 
+  async getUserTokenUsage(userId: string): Promise<{ total_tokens: number; input_tokens: number; output_tokens: number; total_cost: number }> {
+    try {
+      const { data } = await this.client.get<{ total_tokens: number; input_tokens: number; output_tokens: number; total_cost: number }>(
+        `/user/${userId}/token-usage`
+      );
+      return data;
+    } catch (error) {
+      // Return zeros if endpoint not available or error
+      console.warn('Failed to fetch user token usage:', error);
+      return { total_tokens: 0, input_tokens: 0, output_tokens: 0, total_cost: 0 };
+    }
+  }
+
   private wrapError(error: unknown, fallbackMessage: string) {
     if (axios.isAxiosError(error)) {
       const message =

@@ -145,6 +145,13 @@ export interface UploadedFile {
   content_type?: string;
 }
 
+export interface UserTokenUsage {
+  total_tokens: number;
+  input_tokens: number;
+  output_tokens: number;
+  total_cost: number;
+}
+
 export interface UserUsageStats {
   username: string;
   total_messages: number;
@@ -160,4 +167,5 @@ export interface UsageStatsResponse {
   total_cost: number;
   user_stats: UserUsageStats[];
 }
+
 

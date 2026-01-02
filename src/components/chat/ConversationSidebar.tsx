@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Button,
@@ -35,8 +35,8 @@ import { useAuthStore } from '@/store/authStore';
 import type { Conversation } from '@/types/api';
 import { dt } from '@/config/displayTexts';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
+import { agentClient } from '@/services/agentClient';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface ConversationSidebarProps {
@@ -74,6 +74,27 @@ export function ConversationSidebar({
   const [newTitle, setNewTitle] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [isResizing, setIsResizing] = useState(false);
+  const [tokenUsage, setTokenUsage] = useState<{ total_tokens: number; total_cost: number }>({ total_tokens: 0, total_cost: 0 });
+
+  const { user } = useAuthStore();
+
+  // Fetch token usage for current user
+  const fetchTokenUsage = useCallback(async () => {
+    if (!user?.id) return;
+    try {
+      const usage = await agentClient.getUserTokenUsage(user.id);
+      setTokenUsage({ total_tokens: usage.total_tokens, total_cost: usage.total_cost });
+    } catch (error) {
+      console.warn('Failed to fetch token usage:', error);
+    }
+  }, [user?.id]);
+
+  useEffect(() => {
+    fetchTokenUsage();
+    // Refresh token usage every 30 seconds
+    const interval = setInterval(fetchTokenUsage, 30000);
+    return () => clearInterval(interval);
+  }, [fetchTokenUsage]);
 
   useEffect(() => {
     if (!isResizing) return;
@@ -291,6 +312,27 @@ export function ConversationSidebar({
         </DialogActions>
       </Dialog>
 
+
+
+      {/* Token Usage Section */}
+      <Divider />
+      <Box sx={{ p: 2, backgroundColor: 'action.hover', borderRadius: 1, m: 1 }}>
+        <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ display: 'block', mb: 1 }}>
+          Your Usage
+        </Typography>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Box>
+            <Typography variant="body2" color="text.primary" fontWeight={500}>
+              {tokenUsage.total_tokens.toLocaleString()} tokens
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="body2" color="primary.main" fontWeight={600}>
+              ${tokenUsage.total_cost.toFixed(4)}
+            </Typography>
+          </Box>
+        </Stack>
+      </Box>
 
       <Box sx={{ p: 2 }}>
         <Stack spacing={1}>
